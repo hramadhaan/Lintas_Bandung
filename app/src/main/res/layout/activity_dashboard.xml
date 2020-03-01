@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".dashboard.DashboardActivity">
+
+    <FrameLayout
+        android:id="@+id/dashboard_frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/dashboard_bottom_bar" />
+
+    <com.gauravk.bubblenavigation.BubbleNavigationLinearView
+        android:id="@+id/dashboard_bottom_bar"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_alignParentBottom="true"
+        android:background="#F4F4F4"
+        android:elevation="8dp"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/item_angkot"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:bt_active="true"
+            app:bt_colorActive="@color/colorPrimary"
+            app:bt_colorInactive="@color/colorDark"
+            app:bt_icon="@drawable/ic_home_black_24dp"
+            app:bt_title="Angkot" />
+
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/item_ticket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:bt_colorActive="@color/colorPrimary"
+            app:bt_colorInactive="@color/colorDark"
+            app:bt_icon="@drawable/ic_directions_bus_black_24dp"
+            app:bt_title="Tiket" />
+
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/item_profile"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:bt_colorActive="@color/colorPrimary"
+            app:bt_colorInactive="@color/colorDark"
+            app:bt_icon="@drawable/ic_supervisor_account_black_24dp"
+            app:bt_title="Profile" />
+
+    </com.gauravk.bubblenavigation.BubbleNavigationLinearView>
+
+
+</RelativeLayout>
