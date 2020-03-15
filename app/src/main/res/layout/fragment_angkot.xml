@@ -8,15 +8,28 @@
     <!-- TODO: Update blank fragment layout -->
 
     <RelativeLayout
-        android:background="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/angkot_editText"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="Angkot" />
+            android:hint="Code Generator" />
+
+        <Button
+            android:id="@+id/angkot_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/angkot_editText"
+            android:text="Generate" />
+
+        <ImageView
+            android:id="@+id/angkot_barcode"
+            android:layout_width="match_parent"
+            android:layout_height="335dp"
+            android:layout_below="@id/angkot_button" />
+
     </RelativeLayout>
 
 </FrameLayout>

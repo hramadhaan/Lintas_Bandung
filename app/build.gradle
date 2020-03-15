@@ -14,7 +14,7 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    productFlavors{
+    productFlavors {
         sandbox {
             applicationId = "com.lintasbandung.lintasbandungapps"
             resValue "string", "app_name", "Lintas Bandung"
@@ -75,6 +75,10 @@ dependencies {
 //    MIDTRANS
     implementation 'com.midtrans:uikit:1.21.2-SANDBOX'
 //    implementation 'com.midtrans:uikit:1.21.2'
+
+//    BARCODE
+    implementation 'com.google.zxing:core:3.2.1'
+    implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
