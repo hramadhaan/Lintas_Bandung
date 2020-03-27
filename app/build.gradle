@@ -59,6 +59,9 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
     implementation 'com.gauravk.bubblenavigation:bubblenavigation:1.0.7'
+    implementation 'com.xw.repo:bubbleseekbar:3.20'
+    implementation 'com.vipulasri:ticketview:1.0.7'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
 //    NETWORK
     implementation("com.squareup.okhttp3:okhttp:4.2.1")

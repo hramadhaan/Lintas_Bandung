@@ -5,31 +5,16 @@
     android:layout_height="match_parent"
     tools:context=".fragment.AngkotFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#fff">
 
-        <EditText
-            android:id="@+id/angkot_editText"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragmentAngkot_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Code Generator" />
-
-        <Button
-            android:id="@+id/angkot_button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/angkot_editText"
-            android:text="Generate" />
-
-        <ImageView
-            android:id="@+id/angkot_barcode"
-            android:layout_width="match_parent"
-            android:layout_height="335dp"
-            android:layout_below="@id/angkot_button" />
-
+            android:nestedScrollingEnabled="false" />
     </RelativeLayout>
 
 </FrameLayout>

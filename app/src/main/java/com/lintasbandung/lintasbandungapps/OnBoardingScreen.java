@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import com.lintasbandung.lintasbandungapps.adapter.OnboardingAdapter;
 import com.lintasbandung.lintasbandungapps.awalan.LoginActivity;
+import com.lintasbandung.lintasbandungapps.dashboard.DashboardActivity;
+import com.lintasbandung.lintasbandungapps.data.AppState;
 
 public class OnBoardingScreen extends AppCompatActivity {
 
@@ -22,11 +24,18 @@ public class OnBoardingScreen extends AppCompatActivity {
     private TextView[] dots;
     private Button next, back;
     private int currentPage;
+    private AppState appState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_boarding_screen);
+
+        appState = AppState.getInstance();
+        if (AppState.getInstance().isLoggedIn()) {
+            startActivity(new Intent(OnBoardingScreen.this, DashboardActivity.class));
+            finish();
+        }
 
         viewPager = findViewById(R.id.onboarding_viewpager);
         linearLayout = findViewById(R.id.onboarding_linear);

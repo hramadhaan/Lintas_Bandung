@@ -7,6 +7,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,51 +26,66 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.Code128Writer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.lintasbandung.lintasbandungapps.R;
+import com.lintasbandung.lintasbandungapps.adapter.ListAngkotAdapter;
+import com.lintasbandung.lintasbandungapps.data.AppState;
+import com.lintasbandung.lintasbandungapps.models.AllAngkot;
+import com.lintasbandung.lintasbandungapps.network.ApiService;
+import com.lintasbandung.lintasbandungapps.network.ApiServiceDatabase;
+import com.lintasbandung.lintasbandungapps.utils.ApiUtils;
+import com.vipulasri.ticketview.TicketView;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AngkotFragment extends Fragment {
 
-    private EditText editText;
-    private Button button;
-    private ImageView image;
+    private RecyclerView recyclerView;
+    RecyclerView.Adapter mAdapter;
+    RecyclerView.LayoutManager mLayoutManager;
+    private ApiServiceDatabase apiServiceDatabase;
+    private AppState appState;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View viewAngkot = inflater.inflate(R.layout.fragment_angkot, container, false);
-        editText = viewAngkot.findViewById(R.id.angkot_editText);
-        image = viewAngkot.findViewById(R.id.angkot_barcode);
-        button = viewAngkot.findViewById(R.id.angkot_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                generateCode();
-            }
-        });
+
+        apiServiceDatabase = ApiUtils.getDatabase();
+        appState = AppState.getInstance();
+        recyclerView = viewAngkot.findViewById(R.id.fragmentAngkot_recyclerview);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        getAngkot();
+
         return viewAngkot;
     }
 
-    private void generateCode() {
-        try {
-            String productId = editText.getText().toString();
-            Hashtable<EncodeHintType, ErrorCorrectionLevel> hintMap = new Hashtable<EncodeHintType, ErrorCorrectionLevel>();
-            hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
-            Writer codeWriter;
-            codeWriter = new Code128Writer();
-            BitMatrix byteMatrix = codeWriter.encode(productId, BarcodeFormat.CODE_128, 400, 200, hintMap);
-            int width = byteMatrix.getWidth();
-            int height = byteMatrix.getHeight();
-            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
-            for (int i = 0; i < width; i++) {
-                for (int j = 0; j < height; j++) {
-                    bitmap.setPixel(i, j, byteMatrix.get(i, j) ? Color.BLACK : Color.WHITE);
+    private void getAngkot() {
+        Call<ArrayList<AllAngkot>> getAllAngkot = apiServiceDatabase.getAllAngkot();
+        getAllAngkot.enqueue(new Callback<ArrayList<AllAngkot>>() {
+            @Override
+            public void onResponse(Call<ArrayList<AllAngkot>> call, Response<ArrayList<AllAngkot>> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<AllAngkot> allAngkots = response.body();
+                    mAdapter = new ListAngkotAdapter(getContext(), allAngkots);
+                    recyclerView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                    if (mAdapter.getItemCount() == 0) {
+                        Toast.makeText(getContext(), "Tidak ada daftar angkot", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), response.message(), Toast.LENGTH_LONG).show();
                 }
             }
-            image.setImageBitmap(bitmap);
-        } catch (Exception e) {
-            Log.e("Error", e.toString());
-            Toast.makeText(getContext(),e.toString(),Toast.LENGTH_LONG).show();
-        }
+
+            @Override
+            public void onFailure(Call<ArrayList<AllAngkot>> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
