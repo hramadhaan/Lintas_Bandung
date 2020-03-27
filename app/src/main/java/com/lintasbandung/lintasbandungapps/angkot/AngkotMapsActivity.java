@@ -3,9 +3,12 @@ package com.lintasbandung.lintasbandungapps.angkot;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -13,6 +16,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.maps.DirectionsApi;
@@ -42,6 +46,8 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_angkot_maps);
+
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         Intent getIntent = getIntent();
         getFromLat = getIntent.getStringExtra("originLat");
@@ -76,6 +82,18 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
+        try {
+            boolean isSuccess = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style)
+            );
+            if (!isSuccess) {
+                Toast.makeText(AngkotMapsActivity.this, "Map Style Tidak Berfungsi", Toast.LENGTH_LONG).show();
+            }
+        } catch (Resources.NotFoundException e) {
+            e.printStackTrace();
+        }
+
         setupGoogleMapScreenSettings(googleMap);
         DirectionsResult results = getDirectionsDetails(getFromLat + "," + getFromLong, getToLat + "," + getToLong, TravelMode.TRANSIT);
         if (results != null) {
@@ -91,9 +109,10 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
     }
 
     private void setupGoogleMapScreenSettings(GoogleMap mMap) {
-        mMap.setBuildingsEnabled(true);
-        mMap.setIndoorEnabled(true);
-        mMap.setTrafficEnabled(true);
+        mMap.setBuildingsEnabled(false);
+        mMap.setIndoorEnabled(false);
+        mMap.setTrafficEnabled(false);
+
         UiSettings mUiSettings = mMap.getUiSettings();
         mUiSettings.setZoomControlsEnabled(true);
         mUiSettings.setCompassEnabled(true);
@@ -117,7 +136,7 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
         List<LatLng> decodedPath = PolyUtil.decode(results.routes[overview].overviewPolyline.getEncodedPath());
 //        List<PatternItem> patternItems = Arrays.<PatternItem>asList(
 //                new Dot(),new Gap(20), new Dash(30),new Gap(20)
-        mMap.addPolyline(new PolylineOptions().addAll(decodedPath).width(10).color(Color.BLUE));
+        mMap.addPolyline(new PolylineOptions().addAll(decodedPath).width(10).color(Color.WHITE));
 
     }
 
