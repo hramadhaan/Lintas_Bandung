@@ -23,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="android:allowBackup">
-
+        <activity android:name=".dashboard.HistoryActivity"></activity>
+        <activity android:name=".damri.CheckOutActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -38,15 +39,18 @@
 
         <activity
             android:name=".angkot.MapsActivity"
-            android:label="@string/title_activity_maps"></activity>
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".angkot.AngkotMapsActivity"
             android:label="@string/title_activity_angkot_maps" />
         <activity android:name=".ticketing.PembayaranActivity" />
-        <activity android:name=".awalan.SignUpActivity" />
+        <activity
+            android:name=".awalan.SignUpActivity"
+            android:parentActivityName=".awalan.LoginActivity" />
         <activity android:name=".OnBoardingScreen" />
         <activity android:name=".dashboard.DashboardActivity" />
         <activity android:name=".awalan.LoginActivity" />
+        <activity android:name=".damri.FormOrderingTicket" />
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

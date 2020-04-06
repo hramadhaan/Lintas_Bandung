@@ -6,10 +6,11 @@
     tools:context=".fragment.ProfileFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/colorSecondary">
+        android:background="@color/colorSecondary"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/profile_textView"
@@ -18,12 +19,28 @@
             android:layout_centerInParent="true"
             android:text="Profile" />
 
+        <LinearLayout
+            android:id="@+id/profile_history"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#fff"
+            android:orientation="vertical"
+            android:paddingHorizontal="8dp"
+            android:paddingVertical="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Histori Pemesanan" />
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/profile_logout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/profile_textView"
             android:text="Logout" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </FrameLayout>

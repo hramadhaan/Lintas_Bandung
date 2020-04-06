@@ -1,7 +1,5 @@
 package com.lintasbandung.lintasbandungapps.ticketing;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,10 +8,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.lintasbandung.lintasbandungapps.BuildConfig;
 import com.lintasbandung.lintasbandungapps.R;
-import com.lintasbandung.lintasbandungapps.models.CobaBeli;
+import com.lintasbandung.lintasbandungapps.data.AppState;
 import com.lintasbandung.lintasbandungapps.models.DataUser;
+import com.lintasbandung.lintasbandungapps.models.Status;
+import com.lintasbandung.lintasbandungapps.network.ApiService;
+import com.lintasbandung.lintasbandungapps.utils.ApiUtils;
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
 import com.midtrans.sdk.corekit.core.MidtransSDK;
 import com.midtrans.sdk.corekit.core.PaymentMethod;
@@ -21,55 +24,104 @@ import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
 import com.midtrans.sdk.corekit.models.snap.TransactionResult;
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import xyz.hasnat.sweettoast.SweetToast;
+
 public class PembayaranActivity extends AppCompatActivity implements TransactionFinishedCallback {
 
-    private int hargaRute = 10000;
-    private int jumlahTicket = 1;
-    private int jumlahHarga = 0;
-    private TextView rute, tiket, harga;
-    private Button indomaret, mandiri;
+    private String sKeberangkatan, sTujuan, sNamaPemesan, sJumlahPemesan, sHarga, sWaktu, sIdRute;
+    private TextView keberangkatan, tujuan, namaPemesan, jumlahPemesan, harga, waktu, jumlahHarga;
+    private int totalHarga;
+    private Button indomaret, mandiri, gojek;
+    private int a, b;
+    private static final int duration = 2500;
+    private ApiService apiService;
+    private int idUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pembayaran);
 
+        apiService = ApiUtils.getApiSerives();
+
         initMidTrans();
+//        BUTTON
+        indomaret = findViewById(R.id.checkOut_indomaret);
+        mandiri = findViewById(R.id.checkOut_mandiri);
+        gojek = findViewById(R.id.checkOut_gojek);
 
-        rute = findViewById(R.id.pembayaran_rute);
-        tiket = findViewById(R.id.pembayaran_jumlahTicket);
-        harga = findViewById(R.id.pembayaran_jumlahHarga);
+        keberangkatan = findViewById(R.id.checkOut_keberangkatan);
+        tujuan = findViewById(R.id.checkOut_tujuan);
+        namaPemesan = findViewById(R.id.checkOut_namaPemesan);
+        jumlahPemesan = findViewById(R.id.checkOut_jumlahPesanan);
+        harga = findViewById(R.id.checkOut_harga);
+        waktu = findViewById(R.id.checkOut_waktu);
+        jumlahHarga = findViewById(R.id.checkOut_jumlahHarga);
 
-        Intent intent = getIntent();
-        tiket.setText(intent.getStringExtra("ticket"));
-        rute.setText(intent.getStringExtra("rute"));
+        idUser = Integer.parseInt(AppState.getInstance().getUser().getId());
 
-        jumlahTicket = Integer.parseInt(intent.getStringExtra("ticket"));
+        Log.d("USER", String.valueOf(idUser));
 
-        jumlahHarga = hargaRute * jumlahTicket;
+        Intent getIntent = getIntent();
+        sKeberangkatan = getIntent.getStringExtra("keberangkatan");
+        sTujuan = getIntent.getStringExtra("tujuan");
+        sNamaPemesan = getIntent.getStringExtra("namapemesan");
+        sJumlahPemesan = getIntent.getStringExtra("jumlah");
+        sHarga = getIntent.getStringExtra("harga");
+        sWaktu = getIntent.getStringExtra("waktu");
+        sIdRute = getIntent.getStringExtra("rute");
 
-        harga.setText(String.valueOf(jumlahHarga));
 
-        indomaret = findViewById(R.id.pembayaran_button);
+        a = Integer.parseInt(sJumlahPemesan);
+        b = Integer.parseInt(sHarga);
+
+        totalHarga = a * b;
+
+        keberangkatan.setText(sKeberangkatan);
+        tujuan.setText(sTujuan);
+        namaPemesan.setText(sNamaPemesan);
+        jumlahPemesan.setText(sJumlahPemesan);
+        harga.setText(sHarga);
+        waktu.setText(sWaktu);
+        jumlahHarga.setText(String.valueOf(totalHarga));
+
+//        PEMBAYARAN
         indomaret.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 buyItWithIndomaret();
             }
         });
-
-        mandiri = findViewById(R.id.pembayaran_mandiri);
         mandiri.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 buyItWithMandiri();
             }
         });
+
+        gojek.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                buyItWithGopay();
+            }
+        });
     }
 
     private void buyItWithMandiri() {
-        MidtransSDK.getInstance().setTransactionRequest(DataUser.transactionRequest("2", hargaRute, jumlahTicket, "Ticket " + rute));
-        MidtransSDK.getInstance().startPaymentUiFlow(this, PaymentMethod.BANK_TRANSFER_MANDIRI);
+        MidtransSDK.getInstance().setTransactionRequest(DataUser.transactionRequest("2", b, a, "Ticket"));
+        MidtransSDK.getInstance().startPaymentUiFlow(PembayaranActivity.this, PaymentMethod.BANK_TRANSFER_MANDIRI);
+    }
+
+    private void buyItWithGopay() {
+        MidtransSDK.getInstance().setTransactionRequest(DataUser.transactionRequest("2", b, a, "Ticket"));
+        MidtransSDK.getInstance().startPaymentUiFlow(PembayaranActivity.this, PaymentMethod.GO_PAY);
     }
 
     private void initMidTrans() {
@@ -83,37 +135,101 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
     }
 
     private void buyItWithIndomaret() {
-        MidtransSDK.getInstance().setTransactionRequest(DataUser.transactionRequest("2", hargaRute, jumlahTicket, "Ticket " + rute));
-        MidtransSDK.getInstance().startPaymentUiFlow(this, PaymentMethod.INDOMARET);
-
+        MidtransSDK.getInstance().setTransactionRequest(DataUser.transactionRequest("2", b, a, "Ticket"));
+        MidtransSDK.getInstance().startPaymentUiFlow(PembayaranActivity.this, PaymentMethod.BANK_TRANSFER_MANDIRI);
     }
 
 
     @Override
-    public void onTransactionFinished(TransactionResult transactionResult) {
+    public void onTransactionFinished(final TransactionResult transactionResult) {
         if (transactionResult.getResponse() != null) {
             switch (transactionResult.getStatus()) {
                 case TransactionResult.STATUS_SUCCESS:
-                    Toast.makeText(PembayaranActivity.this, "Transaction Finished ID : " + transactionResult.getResponse().getTransactionId(), Toast.LENGTH_LONG).show();
-                    Log.d("SUCCESS: ", transactionResult.getResponse().getOrderId() + "\n" + transactionResult.getResponse().getTransactionId());
+//                    idUser = Integer.parseInt(transactionResult.getResponse().getOrderId());
+                    Call<Status> statusSuccess = apiService.createOrder(sIdRute, a, totalHarga, transactionResult.getResponse().getOrderId(), idUser,
+                            sKeberangkatan, sTujuan, "SUCCESS", "", "",
+                            "", sWaktu);
+                    statusSuccess.enqueue(new Callback<Status>() {
+                        @Override
+                        public void onResponse(Call<Status> call, Response<Status> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body().getStatus().equals("success")) {
+                                    SweetToast.success(PembayaranActivity.this, "Transaction Finished ID : " + transactionResult.getResponse().getOrderId(), duration);
+                                } else {
+                                    SweetToast.error(PembayaranActivity.this, "Update tidak sukses", duration);
+                                }
+                            } else {
+                                SweetToast.error(PembayaranActivity.this, response.message(), duration);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Status> call, Throwable t) {
+                            SweetToast.error(PembayaranActivity.this, t.getMessage(), duration);
+                        }
+                    });
+
                     break;
                 case TransactionResult.STATUS_PENDING:
-                    Toast.makeText(PembayaranActivity.this, "Transaction Pending ID : " + transactionResult.getResponse().getTransactionId(), Toast.LENGTH_LONG).show();
-                    Log.d("PENDING: ", transactionResult.getResponse().getOrderId() + "\n" + transactionResult.getResponse().getTransactionId());
+//                    idUser = Integer.parseInt(transactionResult.getResponse().getOrderId());
+                    Call<Status> statusPending = apiService.createOrder(sIdRute, a, totalHarga, transactionResult.getResponse().getOrderId(), idUser,
+                            sKeberangkatan, sTujuan, "PENDING", "", "",
+                            "", sWaktu);
+                    statusPending.enqueue(new Callback<Status>() {
+                        @Override
+                        public void onResponse(Call<Status> call, Response<Status> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body().getStatus().equals("success")) {
+                                    SweetToast.info(PembayaranActivity.this, "Transaction PENDING ID : " + transactionResult.getResponse().getOrderId(), duration);
+                                } else {
+                                    SweetToast.error(PembayaranActivity.this, "Update tidak sukses", duration);
+                                }
+                            } else {
+                                SweetToast.error(PembayaranActivity.this, response.message(), duration);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Status> call, Throwable t) {
+                            SweetToast.error(PembayaranActivity.this, t.getMessage(), duration);
+                        }
+                    });
+
                     break;
                 case TransactionResult.STATUS_FAILED:
-                    Toast.makeText(PembayaranActivity.this, "Transaction Failed ID : " + transactionResult.getResponse().getTransactionId(), Toast.LENGTH_LONG).show();
-                    Log.d("FAILED: ", transactionResult.getResponse().getOrderId() + "\n" + transactionResult.getResponse().getTransactionId());
+                    Call<Status> statusFailed = apiService.createOrder(sIdRute, a, totalHarga, transactionResult.getResponse().getOrderId(), idUser,
+                            sKeberangkatan, sTujuan, "FAILED", "", "",
+                            "", sWaktu);
+                    statusFailed.enqueue(new Callback<Status>() {
+                        @Override
+                        public void onResponse(Call<Status> call, Response<Status> response) {
+                            if (response.isSuccessful()) {
+                                if (response.body().getStatus().equals("success")) {
+                                    SweetToast.success(PembayaranActivity.this, "Transaction FAILED ID : " + transactionResult.getResponse().getOrderId(), duration);
+                                } else {
+                                    SweetToast.error(PembayaranActivity.this, "Update tidak sukses", duration);
+                                }
+                            } else {
+                                SweetToast.error(PembayaranActivity.this, response.message(), duration);
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<Status> call, Throwable t) {
+                            SweetToast.error(PembayaranActivity.this, t.getMessage(), duration);
+                        }
+                    });
+
                     break;
             }
             transactionResult.getResponse().getValidationMessages();
         } else if (transactionResult.isTransactionCanceled()) {
-            Toast.makeText(PembayaranActivity.this, "Transaction Canceled", Toast.LENGTH_LONG).show();
+            SweetToast.warning(PembayaranActivity.this, "Transaction Canceled", duration);
         } else {
             if (transactionResult.getStatus().equalsIgnoreCase(TransactionResult.STATUS_INVALID)) {
-                Toast.makeText(PembayaranActivity.this, "Transaction Invalid", Toast.LENGTH_LONG).show();
+                SweetToast.warning(PembayaranActivity.this, "Transaction Invalid", duration);
             } else {
-                Toast.makeText(PembayaranActivity.this, "Transaction Finished with Failure", Toast.LENGTH_LONG).show();
+                SweetToast.warning(PembayaranActivity.this, "Transaction Finished with Failure", duration);
             }
         }
     }

@@ -1,5 +1,7 @@
 package com.lintasbandung.lintasbandungapps.services;
 
+import com.lintasbandung.lintasbandungapps.data.AppState;
+
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -27,10 +29,10 @@ public class RetrofitClient {
                         .addHeader("Accept", "application/json")
                         .method(original.method(), original.body());
 
-//                if (AppState.getInstance().hasToken()) {
-//                    String token = AppState.getInstance().provideToken();
-//                    requestBuilder.addHeader("Authorization", token);
-//                }
+                if (AppState.getInstance().hasToken()) {
+                    String token = AppState.getInstance().provideToken();
+                    requestBuilder.addHeader("Authorization", token);
+                }
 
                 Request request = requestBuilder.build();
                 return chain.proceed(request);

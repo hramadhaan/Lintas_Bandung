@@ -67,6 +67,11 @@ public class ListAngkotAdapter extends RecyclerView.Adapter<ListAngkotAdapter.Vi
         return allAngkotArrayList.size();
     }
 
+    public void filterList(ArrayList<AllAngkot> allAngkots) {
+        allAngkotArrayList = allAngkots;
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private TextView code, from, to;

@@ -6,60 +6,17 @@
     tools:context=".fragment.TicketFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff">
+        android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/fragmentTicket_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:nestedScrollingEnabled="false" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Pilih Rute" />
-
-            <Spinner
-                android:id="@+id/ticket_spinner"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Jumlah Tiket" />
-
-            <com.xw.repo.BubbleSeekBar xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/ticket_jumlahTicket"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:bsb_auto_adjust_section_mark="true"
-                app:bsb_max="4"
-                app:bsb_min="1"
-                app:bsb_second_track_color="@color/colorAccent"
-                app:bsb_section_count="3"
-                app:bsb_section_text_position="below_section_mark"
-                app:bsb_show_section_mark="true"
-                app:bsb_show_section_text="true"
-                app:bsb_show_thumb_text="true"
-                app:bsb_thumb_text_size="18sp"
-                app:bsb_touch_to_seek="true" />
-
-            <TextView
-                android:id="@+id/ticket_hasilJumlah"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
-            <Button
-                android:id="@+id/ticket_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Next" />
-
-        </LinearLayout>
-
-    </RelativeLayout>
+    </LinearLayout>
 
 </FrameLayout>

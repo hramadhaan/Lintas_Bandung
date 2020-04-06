@@ -31,6 +31,7 @@ import com.lintasbandung.lintasbandungapps.R;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -104,8 +105,7 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
 
         Log.d("MAPS", origins + "\n" + destinations);
 
-//        Log.d("onMapReady", results.routes[overview].legs[overview].duration.humanReadable);
-//        Log.d("onMapReady", results.routes[overview].legs[overview].distance.humanReadable);
+        Log.d("onMapReady", results.routes[overview].fare.value.toString());
     }
 
     private void setupGoogleMapScreenSettings(GoogleMap mMap) {
@@ -137,6 +137,9 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
 //        List<PatternItem> patternItems = Arrays.<PatternItem>asList(
 //                new Dot(),new Gap(20), new Dash(30),new Gap(20)
         mMap.addPolyline(new PolylineOptions().addAll(decodedPath).width(10).color(Color.WHITE));
+
+        List<LatLng> decodedStes = PolyUtil.decode(results.routes[overview].legs[overview].steps[overview].polyline.getEncodedPath());
+        mMap.addPolyline(new PolylineOptions().addAll(decodedStes).width(10).color(Color.GREEN));
 
     }
 

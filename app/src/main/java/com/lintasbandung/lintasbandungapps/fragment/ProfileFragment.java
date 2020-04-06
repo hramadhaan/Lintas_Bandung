@@ -9,16 +9,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lintasbandung.lintasbandungapps.R;
 import com.lintasbandung.lintasbandungapps.awalan.LoginActivity;
+import com.lintasbandung.lintasbandungapps.dashboard.HistoryActivity;
 import com.lintasbandung.lintasbandungapps.data.AppState;
 
 
 public class ProfileFragment extends Fragment {
 
     private TextView textView;
+    private LinearLayout linearLayout;
     private AppState appState;
     private Button logout;
 
@@ -33,6 +36,13 @@ public class ProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 logout();
+            }
+        });
+        linearLayout = viewProfile.findViewById(R.id.profile_history);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), HistoryActivity.class));
             }
         });
 

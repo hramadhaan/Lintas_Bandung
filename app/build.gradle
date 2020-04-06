@@ -62,6 +62,8 @@ dependencies {
     implementation 'com.xw.repo:bubbleseekbar:3.20'
     implementation 'com.vipulasri:ticketview:1.0.7'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.github.arcadefire:nice-spinner:1.4.4'
+    implementation 'com.github.TheHasnatBD:SweetToast:1.0.2'
 
 //    NETWORK
     implementation("com.squareup.okhttp3:okhttp:4.2.1")

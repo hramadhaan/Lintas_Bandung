@@ -1,46 +1,34 @@
 package com.lintasbandung.lintasbandungapps.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.SeekBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.lintasbandung.lintasbandungapps.BuildConfig;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.lintasbandung.lintasbandungapps.R;
-import com.lintasbandung.lintasbandungapps.models.CobaBeli;
-import com.lintasbandung.lintasbandungapps.ticketing.PembayaranActivity;
-import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
-import com.midtrans.sdk.corekit.core.MidtransSDK;
-import com.midtrans.sdk.corekit.core.PaymentMethod;
-import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
-import com.midtrans.sdk.corekit.models.snap.TransactionResult;
-import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
-import com.xw.repo.BubbleSeekBar;
+import com.lintasbandung.lintasbandungapps.adapter.ListDamriAdapter;
+import com.lintasbandung.lintasbandungapps.models.AllDamri;
+import com.lintasbandung.lintasbandungapps.network.ApiService;
+import com.lintasbandung.lintasbandungapps.utils.ApiUtils;
+
+import java.util.ArrayList;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class TicketFragment extends Fragment {
 
-    private BubbleSeekBar seekBar;
-    private TextView hasilJumlah;
-    //    private int progressSeekbar = 0;
-    private Spinner spinner;
-    private String[] rute = {
-            "Jakarta - Bandung",
-            "Jakarta - Semarang",
-            "Jakarta - Jogjakarta",
-    };
-    private String hasilRute;
-    private Button next;
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    private ApiService apiService;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,24 +36,37 @@ public class TicketFragment extends Fragment {
         // Inflate the layout for this fragment
         View viewTicket = inflater.inflate(R.layout.fragment_ticket, container, false);
 
-        next = viewTicket.findViewById(R.id.ticket_button);
-        hasilJumlah = viewTicket.findViewById(R.id.ticket_hasilJumlah);
-        spinner = viewTicket.findViewById(R.id.ticket_spinner);
-        final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, rute);
-        spinner.setAdapter(adapter);
-
-        seekBar = viewTicket.findViewById(R.id.ticket_jumlahTicket);
-
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PembayaranActivity.class);
-                intent.putExtra("ticket", String.valueOf(seekBar.getProgress()));
-                intent.putExtra("rute", spinner.getSelectedItem().toString());
-                startActivity(intent);
-            }
-        });
+        apiService = ApiUtils.getApiSerives();
+        recyclerView = viewTicket.findViewById(R.id.fragmentTicket_recyclerview);
+        mLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLayoutManager);
+        getRouteDamri();
 
         return viewTicket;
+    }
+
+    private void getRouteDamri() {
+        Call<ArrayList<AllDamri>> listCall = apiService.getAllDamri();
+        listCall.enqueue(new Callback<ArrayList<AllDamri>>() {
+            @Override
+            public void onResponse(Call<ArrayList<AllDamri>> call, Response<ArrayList<AllDamri>> response) {
+                if (response.isSuccessful()) {
+                    ArrayList<AllDamri> allDamriArrayList = response.body();
+                    mAdapter = new ListDamriAdapter(getContext(),allDamriArrayList);
+                    recyclerView.setAdapter(mAdapter);
+                    mAdapter.notifyDataSetChanged();
+                    if (mAdapter.getItemCount() == 0) {
+                        Toast.makeText(getContext(), "Tidak ada rute damri", Toast.LENGTH_LONG).show();
+                    }
+                } else {
+                    Toast.makeText(getContext(), response.message(), Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<AllDamri>> call, Throwable t) {
+                Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
