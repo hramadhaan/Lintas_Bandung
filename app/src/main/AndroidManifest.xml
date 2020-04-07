@@ -23,7 +23,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="android:allowBackup">
-        <activity android:name=".dashboard.HistoryActivity"></activity>
+        <activity android:name=".dashboard.CetakActivity"></activity>
+        <activity android:name=".dashboard.HistoryActivity" />
         <activity android:name=".damri.CheckOutActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

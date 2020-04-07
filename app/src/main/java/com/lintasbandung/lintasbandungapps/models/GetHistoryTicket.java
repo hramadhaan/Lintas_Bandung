@@ -28,9 +28,11 @@ public class GetHistoryTicket {
     @SerializedName("paid_at")
     @Expose
     private String paidAt;
+    @SerializedName("payment_type")
+    @Expose
+    private String payment_type;
 
-
-    public GetHistoryTicket(String id, String jumlahTiket, String harga, String orderId, String status, String keberangkatan, String tujuan, String paidAt) {
+    public GetHistoryTicket(String id, String jumlahTiket, String harga, String orderId, String status, String keberangkatan, String tujuan, String paidAt, String payment_type) {
         this.id = id;
         this.jumlahTiket = jumlahTiket;
         this.harga = harga;
@@ -39,6 +41,7 @@ public class GetHistoryTicket {
         this.keberangkatan = keberangkatan;
         this.tujuan = tujuan;
         this.paidAt = paidAt;
+        this.payment_type = payment_type;
     }
 
     public String getId() {
@@ -103,5 +106,13 @@ public class GetHistoryTicket {
 
     public void setPaidAt(String paidAt) {
         this.paidAt = paidAt;
+    }
+
+    public String getPayment_type() {
+        return payment_type;
+    }
+
+    public void setPayment_type(String payment_type) {
+        this.payment_type = payment_type;
     }
 }

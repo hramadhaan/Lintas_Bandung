@@ -7,6 +7,7 @@ import com.lintasbandung.lintasbandungapps.models.GetHistoryTicket;
 import com.lintasbandung.lintasbandungapps.models.SpecificRuteDamri;
 import com.lintasbandung.lintasbandungapps.models.Status;
 import com.lintasbandung.lintasbandungapps.models.Token;
+import com.lintasbandung.lintasbandungapps.models.ticket.CetakTicketDB;
 
 
 import java.util.ArrayList;
@@ -66,11 +67,16 @@ public interface ApiService {
             @Field("bill_key") String bill_key,
             @Field("biner_code") String biller_code,
             @Field("payment_type") String payment_type,
-            @Field("paid_at") String paid_at
+            @Field("tanggal_pemesanan") String tanggal_pemesanan
     );
 
     @GET("showUserOrder/{id}")
     Call<List<GetHistoryTicket>> getHistoryUser(
+            @Path("id") String id
+    );
+
+    @GET("showSpecificOrder/{id}")
+    Call<CetakTicketDB> getCetakDB(
             @Path("id") String id
     );
 }

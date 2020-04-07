@@ -106,6 +106,7 @@ public class FormOrderingTicket extends AppCompatActivity {
                     intent.putExtra("waktu", waktu);
                     intent.putExtra("rute", rute);
                     startActivity(intent);
+                    finish();
                 }
             }
         });

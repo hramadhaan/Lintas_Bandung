@@ -136,27 +136,39 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
 
     private void buyItWithIndomaret() {
         MidtransSDK.getInstance().setTransactionRequest(DataUser.transactionRequest("2", b, a, "Ticket"));
-        MidtransSDK.getInstance().startPaymentUiFlow(PembayaranActivity.this, PaymentMethod.BANK_TRANSFER_MANDIRI);
+        MidtransSDK.getInstance().startPaymentUiFlow(PembayaranActivity.this, PaymentMethod.INDOMARET);
     }
 
 
     @Override
     public void onTransactionFinished(final TransactionResult transactionResult) {
         if (transactionResult.getResponse() != null) {
+            String hasil = transactionResult.getResponse().getPaymentType();
+
+            String kodePembayaran;
+
+            if (hasil.equals("gopay")) {
+                kodePembayaran = "GOPAY";
+            } else if (hasil.equals("cstore")) {
+                kodePembayaran = "INDOMART";
+            } else {
+                kodePembayaran = "BANK MANDIRI";
+            }
             switch (transactionResult.getStatus()) {
                 case TransactionResult.STATUS_SUCCESS:
 //                    idUser = Integer.parseInt(transactionResult.getResponse().getOrderId());
                     Call<Status> statusSuccess = apiService.createOrder(sIdRute, a, totalHarga, transactionResult.getResponse().getOrderId(), idUser,
                             sKeberangkatan, sTujuan, "SUCCESS", "", "",
-                            "", sWaktu);
+                            kodePembayaran, sWaktu);
                     statusSuccess.enqueue(new Callback<Status>() {
                         @Override
                         public void onResponse(Call<Status> call, Response<Status> response) {
                             if (response.isSuccessful()) {
                                 if (response.body().getStatus().equals("success")) {
                                     SweetToast.success(PembayaranActivity.this, "Transaction Finished ID : " + transactionResult.getResponse().getOrderId(), duration);
+                                    finish();
                                 } else {
-                                    SweetToast.error(PembayaranActivity.this, "Update tidak sukses", duration);
+                                    SweetToast.error(PembayaranActivity.this, "Update tidak sukses, coba ulangi", duration);
                                 }
                             } else {
                                 SweetToast.error(PembayaranActivity.this, response.message(), duration);
@@ -174,15 +186,16 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
 //                    idUser = Integer.parseInt(transactionResult.getResponse().getOrderId());
                     Call<Status> statusPending = apiService.createOrder(sIdRute, a, totalHarga, transactionResult.getResponse().getOrderId(), idUser,
                             sKeberangkatan, sTujuan, "PENDING", "", "",
-                            "", sWaktu);
+                            kodePembayaran, sWaktu);
                     statusPending.enqueue(new Callback<Status>() {
                         @Override
                         public void onResponse(Call<Status> call, Response<Status> response) {
                             if (response.isSuccessful()) {
                                 if (response.body().getStatus().equals("success")) {
                                     SweetToast.info(PembayaranActivity.this, "Transaction PENDING ID : " + transactionResult.getResponse().getOrderId(), duration);
+                                    finish();
                                 } else {
-                                    SweetToast.error(PembayaranActivity.this, "Update tidak sukses", duration);
+                                    SweetToast.error(PembayaranActivity.this, "Update tidak sukses, coba ulangi", duration);
                                 }
                             } else {
                                 SweetToast.error(PembayaranActivity.this, response.message(), duration);
@@ -199,15 +212,16 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
                 case TransactionResult.STATUS_FAILED:
                     Call<Status> statusFailed = apiService.createOrder(sIdRute, a, totalHarga, transactionResult.getResponse().getOrderId(), idUser,
                             sKeberangkatan, sTujuan, "FAILED", "", "",
-                            "", sWaktu);
+                            kodePembayaran, sWaktu);
                     statusFailed.enqueue(new Callback<Status>() {
                         @Override
                         public void onResponse(Call<Status> call, Response<Status> response) {
                             if (response.isSuccessful()) {
                                 if (response.body().getStatus().equals("success")) {
                                     SweetToast.success(PembayaranActivity.this, "Transaction FAILED ID : " + transactionResult.getResponse().getOrderId(), duration);
+                                    finish();
                                 } else {
-                                    SweetToast.error(PembayaranActivity.this, "Update tidak sukses", duration);
+                                    SweetToast.error(PembayaranActivity.this, "Update tidak sukses, coba ulangi", duration);
                                 }
                             } else {
                                 SweetToast.error(PembayaranActivity.this, response.message(), duration);

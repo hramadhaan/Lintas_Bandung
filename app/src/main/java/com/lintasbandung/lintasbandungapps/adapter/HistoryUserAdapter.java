@@ -1,6 +1,7 @@
 package com.lintasbandung.lintasbandungapps.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lintasbandung.lintasbandungapps.R;
+import com.lintasbandung.lintasbandungapps.dashboard.CetakActivity;
 import com.lintasbandung.lintasbandungapps.models.GetHistoryTicket;
 
 import java.util.List;
@@ -42,8 +44,14 @@ public class HistoryUserAdapter extends RecyclerView.Adapter<HistoryUserAdapter.
         holder.listHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, getHistoryTicketList.get(position).getOrderId(), Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(context, CetakActivity.class);
+                intent.putExtra("id_order", getHistoryTicketList.get(position).getOrderId());
+                intent.putExtra("id", getHistoryTicketList.get(position).getId());
+                intent.putExtra("tipe", getHistoryTicketList.get(position).getPayment_type());
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
             }
+
         });
     }
 

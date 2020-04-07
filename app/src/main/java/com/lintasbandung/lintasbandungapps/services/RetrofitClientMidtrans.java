@@ -14,30 +14,15 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class RetrofitClientDatabase {
+public class RetrofitClientMidtrans {
     public static Retrofit retrofit = null;
 
     public static Retrofit getDatabase(String url) {
         HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new Interceptor() {
-            @NotNull
-            @Override
-            public Response intercept(@NotNull Chain chain) throws IOException {
-                Request original = chain.request();
-                Request.Builder requestBuilder = original.newBuilder()
-                        .addHeader("Accept", "application/json")
-                        .method(original.method(), original.body());
 
-                if (AppState.getInstance().hasToken()) {
-                    String token = AppState.getInstance().provideToken();
-                    requestBuilder.addHeader("Authorization", token);
-                }
-
-                Request request = requestBuilder.build();
-                return chain.proceed(request);
-            }
-        }).build();
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(new BasicAuth("SB-Mid-server-GZ5NJdNgLwvNqNSEa6AcsPLJ", ""))
+                .build();
 
         if (retrofit == null) {
             retrofit = new Retrofit.Builder().baseUrl(url)
