@@ -23,14 +23,18 @@ public class CetakTicketDB {
     @SerializedName("tujuan")
     @Expose
     private String tujuan;
+    @SerializedName("status")
+    @Expose
+    private String status;
 
-    public CetakTicketDB(String jumlahTiket, String orderId, String paymentType, String tanggalPemesanan, String keberangkatan, String tujuan) {
+    public CetakTicketDB(String jumlahTiket, String orderId, String paymentType, String tanggalPemesanan, String keberangkatan, String tujuan, String status) {
         this.jumlahTiket = jumlahTiket;
         this.orderId = orderId;
         this.paymentType = paymentType;
         this.tanggalPemesanan = tanggalPemesanan;
         this.keberangkatan = keberangkatan;
         this.tujuan = tujuan;
+        this.status = status;
     }
 
     public String getJumlahTiket() {
@@ -79,5 +83,13 @@ public class CetakTicketDB {
 
     public void setTujuan(String tujuan) {
         this.tujuan = tujuan;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

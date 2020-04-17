@@ -25,14 +25,14 @@ public class GetHistoryTicket {
     @SerializedName("tujuan")
     @Expose
     private String tujuan;
-    @SerializedName("paid_at")
+    @SerializedName("tanggal_pemesanan")
     @Expose
-    private String paidAt;
+    private String tanggal_pemesanan;
     @SerializedName("payment_type")
     @Expose
     private String payment_type;
 
-    public GetHistoryTicket(String id, String jumlahTiket, String harga, String orderId, String status, String keberangkatan, String tujuan, String paidAt, String payment_type) {
+    public GetHistoryTicket(String id, String jumlahTiket, String harga, String orderId, String status, String keberangkatan, String tujuan, String tanggal_pemesanan, String payment_type) {
         this.id = id;
         this.jumlahTiket = jumlahTiket;
         this.harga = harga;
@@ -40,7 +40,7 @@ public class GetHistoryTicket {
         this.status = status;
         this.keberangkatan = keberangkatan;
         this.tujuan = tujuan;
-        this.paidAt = paidAt;
+        this.tanggal_pemesanan = tanggal_pemesanan;
         this.payment_type = payment_type;
     }
 
@@ -100,12 +100,12 @@ public class GetHistoryTicket {
         this.tujuan = tujuan;
     }
 
-    public String getPaidAt() {
-        return paidAt;
+    public String getTanggal_pemesanan() {
+        return tanggal_pemesanan;
     }
 
-    public void setPaidAt(String paidAt) {
-        this.paidAt = paidAt;
+    public void setTanggal_pemesanan(String tanggal_pemesanan) {
+        this.tanggal_pemesanan = tanggal_pemesanan;
     }
 
     public String getPayment_type() {

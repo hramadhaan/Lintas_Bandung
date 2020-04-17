@@ -158,7 +158,7 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
                 case TransactionResult.STATUS_SUCCESS:
 //                    idUser = Integer.parseInt(transactionResult.getResponse().getOrderId());
                     Call<Status> statusSuccess = apiService.createOrder(sIdRute, a, totalHarga, transactionResult.getResponse().getOrderId(), idUser,
-                            sKeberangkatan, sTujuan, "SUCCESS", "", "",
+                            sKeberangkatan, sTujuan, "READY", "", "",
                             kodePembayaran, sWaktu);
                     statusSuccess.enqueue(new Callback<Status>() {
                         @Override
@@ -185,7 +185,7 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
                 case TransactionResult.STATUS_PENDING:
 //                    idUser = Integer.parseInt(transactionResult.getResponse().getOrderId());
                     Call<Status> statusPending = apiService.createOrder(sIdRute, a, totalHarga, transactionResult.getResponse().getOrderId(), idUser,
-                            sKeberangkatan, sTujuan, "PENDING", "", "",
+                            sKeberangkatan, sTujuan, "READY", "", "",
                             kodePembayaran, sWaktu);
                     statusPending.enqueue(new Callback<Status>() {
                         @Override
@@ -211,7 +211,7 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
                     break;
                 case TransactionResult.STATUS_FAILED:
                     Call<Status> statusFailed = apiService.createOrder(sIdRute, a, totalHarga, transactionResult.getResponse().getOrderId(), idUser,
-                            sKeberangkatan, sTujuan, "FAILED", "", "",
+                            sKeberangkatan, sTujuan, "READY", "", "",
                             kodePembayaran, sWaktu);
                     statusFailed.enqueue(new Callback<Status>() {
                         @Override

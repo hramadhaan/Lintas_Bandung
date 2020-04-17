@@ -44,6 +44,9 @@ public class Gojek {
     @Expose
     private String merchantId;
 
+    public Gojek() {
+    }
+
     public Gojek(String transactionTime, String grossAmount, String currency, String orderId, String paymentType, String signatureKey, String statusCode, String transactionId, String transactionStatus, String fraudStatus, String settlementTime, String statusMessage, String merchantId) {
         this.transactionTime = transactionTime;
         this.grossAmount = grossAmount;

@@ -1,11 +1,11 @@
 package com.lintasbandung.lintasbandungapps.dashboard;
 
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Bundle;
-import android.widget.Toast;
 
 import com.lintasbandung.lintasbandungapps.R;
 import com.lintasbandung.lintasbandungapps.adapter.HistoryUserAdapter;
@@ -29,6 +29,7 @@ public class HistoryActivity extends AppCompatActivity {
     private String idUser;
     private List<GetHistoryTicket> getHistoryTickets;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,11 +39,14 @@ public class HistoryActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.history_recyclerView);
         apiService = ApiUtils.getApiSerives();
-        mLayoutManager = new LinearLayoutManager(getApplicationContext());
-        recyclerView.setLayoutManager(mLayoutManager);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        linearLayoutManager.setReverseLayout(true);
+        linearLayoutManager.setStackFromEnd(true);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
         getData();
     }
+
 
     private void getData() {
         Call<List<GetHistoryTicket>> listCall = apiService.getHistoryUser(idUser);

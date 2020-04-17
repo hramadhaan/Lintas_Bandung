@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -40,7 +38,7 @@ public class HistoryUserAdapter extends RecyclerView.Adapter<HistoryUserAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
         holder.rute.setText(getHistoryTicketList.get(position).getKeberangkatan() + " => " + getHistoryTicketList.get(position).getTujuan());
-        holder.status.setText(getHistoryTicketList.get(position).getStatus());
+        holder.status.setText(getHistoryTicketList.get(position).getTanggal_pemesanan());
         holder.listHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +46,8 @@ public class HistoryUserAdapter extends RecyclerView.Adapter<HistoryUserAdapter.
                 intent.putExtra("id_order", getHistoryTicketList.get(position).getOrderId());
                 intent.putExtra("id", getHistoryTicketList.get(position).getId());
                 intent.putExtra("tipe", getHistoryTicketList.get(position).getPayment_type());
+                intent.putExtra("keb", getHistoryTicketList.get(position).getKeberangkatan());
+                intent.putExtra("tuj", getHistoryTicketList.get(position).getTujuan());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
