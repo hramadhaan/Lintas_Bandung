@@ -29,7 +29,8 @@ public interface ApiService {
             @Field("last_name") String last_name,
             @Field("email") String email,
             @Field("phone") String phone,
-            @Field("password") String password
+            @Field("password") String password,
+            @Field("role") String role
     );
 
     @FormUrlEncoded

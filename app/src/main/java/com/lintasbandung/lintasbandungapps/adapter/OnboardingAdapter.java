@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -24,19 +24,19 @@ public class OnboardingAdapter extends PagerAdapter {
 
     //    ARRAYS
     public int[] slide_images = {
-            R.drawable.onboarding_satu,
-            R.drawable.onboarding_dua,
-            R.drawable.onboarding_tiga,
+            R.drawable.ic_undraw_order_ride_xjs4,
+            R.drawable.ic_undraw_verified_tw20,
+            R.drawable.ic_undraw_happy_feeling_slmw,
     };
 
     public String[] slide_headings = {
-            "Pesan Kapanpun", "Pembayaran lewat apa saja", "Tak perlu menunggu lagi",
+            "Akhirnya...", "Aman dan Akurat", "Langsung aja pakai",
     };
 
     public String[] slide_subheadings = {
             "Pesan kapan saja dimana saja sesibuk apapun Anda",
-            "Metode pembayarannya lebih banyak",
-            "Tak perlu lagi menunggu lama di terminal"
+            "Metode pembayarannya banyak, jadi ga perlu khawatir lagi deh...",
+            "Hanya lewat Lintas Bandung pemesanan akan lebih mudah"
     };
 
     @Override
@@ -67,6 +67,6 @@ public class OnboardingAdapter extends PagerAdapter {
 
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-        container.removeView((RelativeLayout) object);
+        container.removeView((LinearLayout) object);
     }
 }

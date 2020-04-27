@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -24,7 +27,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.errors.ApiException;
 import com.lintasbandung.lintasbandungapps.R;
-import com.lintasbandung.lintasbandungapps.dashboard.DashboardActivity;
+import com.lintasbandung.lintasbandungapps.activity.HomePageActivity;
 import com.lintasbandung.lintasbandungapps.data.AppState;
 import com.lintasbandung.lintasbandungapps.models.DataUser;
 import com.lintasbandung.lintasbandungapps.models.Token;
@@ -44,16 +47,24 @@ public class LoginActivity extends AppCompatActivity {
     private ApiService apiService;
     private EditText email, password;
     private RelativeLayout login;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.bluePrimary));
+        }
         apiService = ApiUtils.getApiSerives();
         appState = AppState.getInstance();
 
         login = findViewById(R.id.login);
+        progressBar = findViewById(R.id.login_progressBar);
 
         button = findViewById(R.id.login_button);
         email = findViewById(R.id.login_email);
@@ -79,23 +90,25 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
     private void signIn() {
-
-        signIn.setEnabled(false);
+        signIn.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
 
         String string_email = email.getText().toString();
         String string_password = password.getText().toString();
 
         if (string_email.matches("")) {
             Toast.makeText(LoginActivity.this, "Masukkan E-Mail Anda !", Toast.LENGTH_LONG).show();
-            signIn.setEnabled(true);
+            signIn.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
         } else if (string_password.matches("")) {
             Toast.makeText(LoginActivity.this, "Masukkan Password Anda !", Toast.LENGTH_LONG).show();
-            signIn.setEnabled(true);
+            signIn.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
         } else if (string_email.matches("") && string_password.matches("")) {
             Toast.makeText(LoginActivity.this, "Masukkan E-Mail dan Password Anda !", Toast.LENGTH_LONG).show();
-            signIn.setEnabled(true);
+            signIn.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
         } else {
             closeKeyboard();
             Call<Token> tokenCall = apiService.getToken(string_email, string_password);
@@ -108,22 +121,28 @@ public class LoginActivity extends AppCompatActivity {
 //                        Toast.makeText(LoginActivity.this, "E-Mail atau Password tidak ada", Toast.LENGTH_LONG).show();
                             Snackbar snackbar = Snackbar.make(login, "E-Mail atau Password belum terdaftar", Snackbar.LENGTH_LONG);
                             snackbar.show();
-                            signIn.setEnabled(true);
+                            signIn.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
                         } else {
                             appState.setToken(hasilToken);
                             appState.setIsLoggedIn(true);
                             getUser();
                             signOut();
-                            signIn.setEnabled(true);
+                            signIn.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
                         }
                     } else {
-
+                        Toast.makeText(LoginActivity.this, response.message(), Toast.LENGTH_LONG).show();
+                        signIn.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Token> call, Throwable t) {
                     Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    signIn.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
                 }
             });
         }
@@ -143,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onResponse(Call<DataUser> call, Response<DataUser> response) {
                 if (response.isSuccessful()) {
                     appState.saveUser(response.body());
-                    Intent intent = new Intent(LoginActivity.this, DashboardActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, HomePageActivity.class);
                     startActivity(intent);
                     finish();
                 } else {
@@ -177,6 +196,7 @@ public class LoginActivity extends AppCompatActivity {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             if (account == null) {
                 Toast.makeText(LoginActivity.this, "Account Tidak Ada", Toast.LENGTH_LONG).show();
+                signOut();
             } else {
 //                Toast.makeText(LoginActivity.this, account.getGivenName() + " " + account.getFamilyName(), Toast.LENGTH_LONG).show();
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class));

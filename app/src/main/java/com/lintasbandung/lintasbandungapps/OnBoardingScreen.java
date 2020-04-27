@@ -1,19 +1,21 @@
 package com.lintasbandung.lintasbandungapps;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.viewpager.widget.ViewPager;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
+
+import com.lintasbandung.lintasbandungapps.activity.HomePageActivity;
 import com.lintasbandung.lintasbandungapps.adapter.OnboardingAdapter;
 import com.lintasbandung.lintasbandungapps.awalan.LoginActivity;
-import com.lintasbandung.lintasbandungapps.dashboard.DashboardActivity;
 import com.lintasbandung.lintasbandungapps.data.AppState;
 
 public class OnBoardingScreen extends AppCompatActivity {
@@ -31,9 +33,16 @@ public class OnBoardingScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_on_boarding_screen);
 
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.bluePrimary));
+        }
+
         appState = AppState.getInstance();
-        if (AppState.getInstance().isLoggedIn()) {
-            startActivity(new Intent(OnBoardingScreen.this, DashboardActivity.class));
+        if (appState.isLoggedIn()) {
+            startActivity(new Intent(OnBoardingScreen.this, HomePageActivity.class));
             finish();
         }
 
@@ -78,7 +87,7 @@ public class OnBoardingScreen extends AppCompatActivity {
             linearLayout.addView(dots[i]);
         }
         if (dots.length > 0) {
-            dots[position].setTextColor(getResources().getColor(R.color.colorAccent));
+            dots[position].setTextColor(getResources().getColor(R.color.bluePrimary));
         }
     }
 

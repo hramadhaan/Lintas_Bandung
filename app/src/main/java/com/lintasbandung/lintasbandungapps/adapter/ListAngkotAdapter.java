@@ -41,9 +41,8 @@ public class ListAngkotAdapter extends RecyclerView.Adapter<ListAngkotAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.code.setText(allAngkotArrayList.get(position).getKode());
-        holder.from.setText(allAngkotArrayList.get(position).getFrom().getPlaceName());
-        holder.to.setText(allAngkotArrayList.get(position).getTo().getPlaceName());
+        holder.code.setText("Kode Angkot: " + allAngkotArrayList.get(position).getKode());
+        holder.from.setText(allAngkotArrayList.get(position).getFrom().getPlaceName() + " - " + allAngkotArrayList.get(position).getTo().getPlaceName());
 
         Picasso.get().load(allAngkotArrayList.get(position).getImg()).into(holder.image);
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -74,7 +73,7 @@ public class ListAngkotAdapter extends RecyclerView.Adapter<ListAngkotAdapter.Vi
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView code, from, to;
+        private TextView code, from;
         private ImageView image;
         private LinearLayout linearLayout;
 
@@ -82,7 +81,6 @@ public class ListAngkotAdapter extends RecyclerView.Adapter<ListAngkotAdapter.Vi
             super(itemView);
             code = itemView.findViewById(R.id.listAngkotCode);
             from = itemView.findViewById(R.id.listAngkotFrom);
-            to = itemView.findViewById(R.id.listAngkotTo);
             image = itemView.findViewById(R.id.listAngkotImage);
             linearLayout = itemView.findViewById(R.id.listAngkot);
         }

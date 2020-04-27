@@ -1,9 +1,14 @@
 package com.lintasbandung.lintasbandungapps.awalan;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,15 +37,23 @@ public class SignUpActivity extends AppCompatActivity {
     private Button submit;
     private ApiService apiService;
     private AppState appState;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.bluePrimary));
+        }
 
         apiService = ApiUtils.getApiSerives();
         appState = AppState.getInstance();
 
+        progressBar = findViewById(R.id.signUp_progressBar);
         firstName = findViewById(R.id.signUp_firstName);
         lastName = findViewById(R.id.signUp_lastName);
         email = findViewById(R.id.signUp_email);
@@ -64,8 +77,10 @@ public class SignUpActivity extends AppCompatActivity {
             numbPhone.requestFocus();
         } else {
             finish();
-            Toast.makeText(SignUpActivity.this, "Tidak ada data akun Google", Toast.LENGTH_LONG).show();
+            showToast("Tidak ada data Google Account");
         }
+        signOut();
+
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,36 +91,63 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void signUp() {
+        submit.setVisibility(View.GONE);
+        progressBar.setVisibility(View.VISIBLE);
         String string_firstName = firstName.getText().toString();
         String string_lastName = lastName.getText().toString();
         String string_email = email.getText().toString();
         String string_phone = numbPhone.getText().toString();
         String string_password = password.getText().toString();
 
-        Call<Status> createUser = apiService.createUser(string_firstName, string_lastName, string_email, string_phone, string_password);
-        createUser.enqueue(new Callback<Status>() {
-            @Override
-            public void onResponse(Call<Status> call, Response<Status> response) {
-                if (response.isSuccessful()) {
-                    if (response.body().getStatus().equals("sukses")) {
-                        finish();
-                        signOut();
-                    } else if (response.body().getStatus().equals("gagal")) {
-                        Toast.makeText(SignUpActivity.this, "Gagal Mendaftarkan Akun", Toast.LENGTH_LONG).show();
+        closeKeyboard();
+        if (string_email.equals("") && string_firstName.equals("") && string_lastName.equals("") && string_phone.equals("") && string_password.equals("")) {
+            showToast("Wajib isi data Anda");
+            submit.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        } else {
+            Call<Status> createUser = apiService.createUser(string_firstName, string_lastName, string_email, string_phone, string_password, "penumpang");
+            createUser.enqueue(new Callback<Status>() {
+                @Override
+                public void onResponse(Call<Status> call, Response<Status> response) {
+                    if (response.isSuccessful()) {
+                        if (response.body().getStatus().equals("sukses")) {
+                            submit.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                            finish();
+                            signOut();
+                            showToast("Akun anda terdaftar, silahkan login !");
+                        } else if (response.body().getStatus().equals("gagal")) {
+                            showToast("Gagal mendaftarkan akun atau akun Anda telah terdaftar");
+                            submit.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                        } else {
+                            submit.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
+                            showToast("Terjadi kesalahan error");
+                        }
                     } else {
-                        Toast.makeText(SignUpActivity.this, "Terjadi Error", Toast.LENGTH_LONG).show();
+                        showToast(response.message());
+                        submit.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.GONE);
                     }
-                } else {
-                    Toast.makeText(SignUpActivity.this, response.message(), Toast.LENGTH_LONG).show();
                 }
-            }
 
-            @Override
-            public void onFailure(Call<Status> call, Throwable t) {
-                Toast.makeText(SignUpActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
-            }
-        });
+                @Override
+                public void onFailure(Call<Status> call, Throwable t) {
+                    showToast(t.getMessage());
+                    submit.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                }
+            });
+        }
+    }
 
+    private void closeKeyboard() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private void signOut() {
@@ -115,5 +157,9 @@ public class SignUpActivity extends AppCompatActivity {
 //                Toast.makeText(SignUpActivity.this, "Gagal Membuat Akun", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_LONG).show();
     }
 }
