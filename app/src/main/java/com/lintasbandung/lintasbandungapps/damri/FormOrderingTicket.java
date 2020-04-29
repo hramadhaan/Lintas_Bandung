@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.lintasbandung.lintasbandungapps.R;
 import com.lintasbandung.lintasbandungapps.data.AppState;
@@ -41,18 +42,27 @@ public class FormOrderingTicket extends AppCompatActivity {
     private Button checkOut;
     private static final int duration = 2500;
     private ApiService apiService;
-    private String a, harga;
+    private String a, b, harga;
     private List<String> getTrayek;
     private EditText namaPemesan, jumlahPemesan;
     private TextView currentDate;
     private LinearLayout chooseDate;
     private int year, month, day;
     private String waktu, rute;
+    private Toolbar toolbar;
+    private TextView judul;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_form_ordering_ticket);
+
+        toolbar = findViewById(R.id.fromOrder_toolbar);
+        judul = toolbar.findViewById(R.id.fromOrder_judul);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
         Calendar.getInstance();
         year = Calendar.YEAR;
         month = Calendar.MONTH;
@@ -75,6 +85,7 @@ public class FormOrderingTicket extends AppCompatActivity {
 
         Intent getIntent = getIntent();
         a = getIntent.getStringExtra("id");
+        b = getIntent.getStringExtra("rute");
 
         keberangkatan = findViewById(R.id.fromOrder_keberangkatan);
         tujuan = findViewById(R.id.fromOrder_tujuan);
@@ -94,10 +105,11 @@ public class FormOrderingTicket extends AppCompatActivity {
 
                 if (sKeberangkatan.equals(sTujuan)) {
                     SweetToast.error(FormOrderingTicket.this, "Keberangkatan dan Tujuan Tidak Boleh Sama", duration);
-                } else if (sNamaPemesan.isEmpty() || sJumlahPemesan.isEmpty()) {
+                } else if (sNamaPemesan.isEmpty() || sJumlahPemesan.isEmpty() || currentDate.getText().equals("")) {
                     SweetToast.error(FormOrderingTicket.this, "Data Harus Diisi", duration);
                 } else {
                     Intent intent = new Intent(FormOrderingTicket.this, PembayaranActivity.class);
+                    intent.putExtra("namaTrayek", b);
                     intent.putExtra("keberangkatan", sKeberangkatan);
                     intent.putExtra("tujuan", sTujuan);
                     intent.putExtra("namapemesan", sNamaPemesan);
@@ -134,21 +146,10 @@ public class FormOrderingTicket extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<SpecificRuteDamri> call, Throwable t) {
-
+                SweetToast.error(getApplicationContext(), t.getMessage(), duration);
             }
         });
     }
-
-//    @Override
-//    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//        Calendar c = Calendar.getInstance();
-//        c.set(Calendar.YEAR, year);
-//        c.set(Calendar.MONTH, month);
-//        c.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-//        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
-//
-//        currentDate.setText(currentDateString);
-//    }
 
     public void showDatePicker(View view) {
         DatePickerDialog dpd = new DatePickerDialog(FormOrderingTicket.this, new DatePickerDialog.OnDateSetListener() {

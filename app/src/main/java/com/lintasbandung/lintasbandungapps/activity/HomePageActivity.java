@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.lintasbandung.lintasbandungapps.R;
 import com.lintasbandung.lintasbandungapps.activity.angkot.PesanAngkotActivity;
+import com.lintasbandung.lintasbandungapps.activity.damri.ListDamriActivity;
 import com.lintasbandung.lintasbandungapps.data.AppState;
 import com.lintasbandung.lintasbandungapps.network.ApiService;
 
@@ -59,6 +60,13 @@ public class HomePageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent pesanAngkot = new Intent(HomePageActivity.this, PesanAngkotActivity.class);
                 startActivity(pesanAngkot);
+            }
+        });
+        pesanDamri.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent pesanDamri = new Intent(HomePageActivity.this, ListDamriActivity.class);
+                startActivity(pesanDamri);
             }
         });
         lihatSemua.setOnClickListener(new View.OnClickListener() {

@@ -52,7 +52,7 @@ public class TicketFragment extends Fragment {
             public void onResponse(Call<ArrayList<AllDamri>> call, Response<ArrayList<AllDamri>> response) {
                 if (response.isSuccessful()) {
                     ArrayList<AllDamri> allDamriArrayList = response.body();
-                    mAdapter = new ListDamriAdapter(getContext(),allDamriArrayList);
+                    mAdapter = new ListDamriAdapter(getContext(), allDamriArrayList);
                     recyclerView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                     if (mAdapter.getItemCount() == 0) {

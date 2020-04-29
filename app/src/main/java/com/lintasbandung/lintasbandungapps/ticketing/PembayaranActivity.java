@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.lintasbandung.lintasbandungapps.BuildConfig;
 import com.lintasbandung.lintasbandungapps.R;
@@ -35,14 +36,15 @@ import xyz.hasnat.sweettoast.SweetToast;
 
 public class PembayaranActivity extends AppCompatActivity implements TransactionFinishedCallback {
 
-    private String sKeberangkatan, sTujuan, sNamaPemesan, sJumlahPemesan, sHarga, sWaktu, sIdRute;
-    private TextView keberangkatan, tujuan, namaPemesan, jumlahPemesan, harga, waktu, jumlahHarga;
+    private String sKeberangkatan, sTujuan, sNamaPemesan, sJumlahPemesan, sHarga, sWaktu, sIdRute, sTrayek;
+    private TextView keberangkatan, tujuan, namaPemesan, jumlahPemesan, waktu, jumlahHarga, namaTrayek;
     private int totalHarga;
     private Button indomaret, mandiri, gojek;
     private int a, b;
     private static final int duration = 2500;
     private ApiService apiService;
     private int idUser;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +52,11 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
         setContentView(R.layout.activity_pembayaran);
 
         apiService = ApiUtils.getApiSerives();
+
+        toolbar = findViewById(R.id.checkOut_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         initMidTrans();
 //        BUTTON
@@ -61,9 +68,9 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
         tujuan = findViewById(R.id.checkOut_tujuan);
         namaPemesan = findViewById(R.id.checkOut_namaPemesan);
         jumlahPemesan = findViewById(R.id.checkOut_jumlahPesanan);
-        harga = findViewById(R.id.checkOut_harga);
         waktu = findViewById(R.id.checkOut_waktu);
         jumlahHarga = findViewById(R.id.checkOut_jumlahHarga);
+        namaTrayek = findViewById(R.id.checkOut_namaTrayek);
 
         idUser = Integer.parseInt(AppState.getInstance().getUser().getId());
 
@@ -77,6 +84,7 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
         sHarga = getIntent.getStringExtra("harga");
         sWaktu = getIntent.getStringExtra("waktu");
         sIdRute = getIntent.getStringExtra("rute");
+        sTrayek = getIntent.getStringExtra("namaTrayek");
 
 
         a = Integer.parseInt(sJumlahPemesan);
@@ -88,9 +96,9 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
         tujuan.setText(sTujuan);
         namaPemesan.setText(sNamaPemesan);
         jumlahPemesan.setText(sJumlahPemesan);
-        harga.setText(sHarga);
         waktu.setText(sWaktu);
         jumlahHarga.setText(String.valueOf(totalHarga));
+        namaTrayek.setText(sTrayek);
 
 //        PEMBAYARAN
         indomaret.setOnClickListener(new View.OnClickListener() {

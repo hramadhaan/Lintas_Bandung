@@ -37,13 +37,13 @@ public class ListDamriAdapter extends RecyclerView.Adapter<ListDamriAdapter.Damr
 
     @Override
     public void onBindViewHolder(@NonNull DamriHolder holder, final int position) {
-        holder.dari.setText(allDamriArrayList.get(position).getFrom());
-        holder.ke.setText(allDamriArrayList.get(position).getTo());
+        holder.listDamriTrayek.setText(allDamriArrayList.get(position).getNamaTrayek());
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, FormOrderingTicket.class);
                 intent.putExtra("id", allDamriArrayList.get(position).getId());
+                intent.putExtra("rute", allDamriArrayList.get(position).getNamaTrayek());
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
@@ -56,13 +56,12 @@ public class ListDamriAdapter extends RecyclerView.Adapter<ListDamriAdapter.Damr
     }
 
     public class DamriHolder extends RecyclerView.ViewHolder {
-        private TextView dari, ke;
+        private TextView listDamriTrayek;
         private LinearLayout linearLayout;
 
         public DamriHolder(@NonNull View itemView) {
             super(itemView);
-            dari = itemView.findViewById(R.id.listDamriDari);
-            ke = itemView.findViewById(R.id.listDamriKe);
+            listDamriTrayek = itemView.findViewById(R.id.listDamriTrayek);
             linearLayout = itemView.findViewById(R.id.listDamri);
         }
     }

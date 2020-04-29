@@ -24,8 +24,11 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="android:allowBackup">
         <activity
-            android:name=".activity.angkot.PesanAngkotActivity"
+            android:name=".activity.damri.ListDamriActivity"
             android:parentActivityName=".activity.HomePageActivity"></activity>
+        <activity
+            android:name=".activity.angkot.PesanAngkotActivity"
+            android:parentActivityName=".activity.HomePageActivity" />
         <activity android:name=".activity.HomePageActivity" />
         <activity android:name=".dashboard.CetakActivity" />
         <activity android:name=".dashboard.HistoryActivity" />
@@ -48,14 +51,18 @@
         <activity
             android:name=".angkot.AngkotMapsActivity"
             android:label="@string/title_activity_angkot_maps" />
-        <activity android:name=".ticketing.PembayaranActivity" />
+        <activity
+            android:name=".ticketing.PembayaranActivity"
+            android:parentActivityName=".damri.FormOrderingTicket" />
         <activity
             android:name=".awalan.SignUpActivity"
             android:parentActivityName=".awalan.LoginActivity" />
         <activity android:name=".OnBoardingScreen" />
         <activity android:name=".dashboard.DashboardActivity" />
         <activity android:name=".awalan.LoginActivity" />
-        <activity android:name=".damri.FormOrderingTicket" />
+        <activity
+            android:name=".damri.FormOrderingTicket"
+            android:parentActivityName=".activity.damri.ListDamriActivity" />
         <activity android:name=".SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
