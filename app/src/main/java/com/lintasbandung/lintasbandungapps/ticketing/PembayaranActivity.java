@@ -86,7 +86,6 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
         sIdRute = getIntent.getStringExtra("rute");
         sTrayek = getIntent.getStringExtra("namaTrayek");
 
-
         a = Integer.parseInt(sJumlahPemesan);
         b = Integer.parseInt(sHarga);
 

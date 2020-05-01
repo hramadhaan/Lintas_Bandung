@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.lintasbandung.lintasbandungapps.R;
 import com.lintasbandung.lintasbandungapps.activity.angkot.PesanAngkotActivity;
 import com.lintasbandung.lintasbandungapps.activity.damri.ListDamriActivity;
+import com.lintasbandung.lintasbandungapps.dashboard.HistoryActivity;
 import com.lintasbandung.lintasbandungapps.data.AppState;
 import com.lintasbandung.lintasbandungapps.network.ApiService;
 
@@ -72,7 +73,7 @@ public class HomePageActivity extends AppCompatActivity {
         lihatSemua.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("Lihat Semua");
+                startActivity(new Intent(HomePageActivity.this, HistoryActivity.class));
             }
         });
     }

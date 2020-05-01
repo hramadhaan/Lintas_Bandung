@@ -167,7 +167,7 @@ public class FormOrderingTicket extends AppCompatActivity {
         }, year, month, day);
         //disaple past date
         dpd.getDatePicker().setMinDate(new Date().getTime());
-        dpd.getDatePicker().setMaxDate(System.currentTimeMillis() + (1000 * 60 * 60 * 24 * 7));
+        dpd.getDatePicker().setMaxDate(System.currentTimeMillis() + (1000 * 60 * 60 * 24 * 3));
         dpd.show();
     }
 }

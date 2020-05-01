@@ -1,9 +1,11 @@
 package com.lintasbandung.lintasbandungapps.activity.angkot;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
@@ -12,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.lintasbandung.lintasbandungapps.R;
 import com.lintasbandung.lintasbandungapps.adapter.ListAngkotAdapter;
 import com.lintasbandung.lintasbandungapps.models.AllAngkot;
@@ -35,6 +39,7 @@ public class PesanAngkotActivity extends AppCompatActivity {
     private SwipeRefreshLayout refreshLayout;
     private ApiService apiService;
     private FloatingActionButton floatingActionButton;
+    private String id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,10 +87,37 @@ public class PesanAngkotActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("Toast");
+//                showToast("Toast");
+                IntentIntegrator intentIntegrator = new IntentIntegrator(PesanAngkotActivity.this);
+                intentIntegrator.setDesiredBarcodeFormats(IntentIntegrator.ALL_CODE_TYPES);
+                intentIntegrator.setCameraId(0);
+                intentIntegrator.setOrientationLocked(false);
+                intentIntegrator.setBeepEnabled(true);
+                intentIntegrator.setPrompt("Letakkan secara horizontal dan pastikan barcode sejajar dengan garis merah");
+                intentIntegrator.initiateScan();
             }
         });
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (intentResult != null) {
+            if (intentResult.getContents() == null) {
+                showToast("Cancelled");
+            } else {
+                id = intentResult.getContents();
+                sendToForm(id);
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    private void sendToForm(String id) {
+        Intent intent = new Intent(PesanAngkotActivity.this, ScanAngkotActivity.class);
+        intent.putExtra("id", id);
+        startActivity(intent);
     }
 
     private void filter(String newText) {

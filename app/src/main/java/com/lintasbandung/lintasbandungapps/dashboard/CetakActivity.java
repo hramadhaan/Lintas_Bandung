@@ -15,8 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -65,8 +65,10 @@ import retrofit2.Response;
 public class CetakActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private CardView cardView;
 
-    private TextView keberangkatan, jumlahPesanan, tglKeberangkatan, status, kodePembayaran, tipePembayaran;
+    private TextView keberangkatan, jumlahPesanan, tglKeberangkatan, status, kodePembayaran, tipePembayaran,
+            halteKeberangkatan, halteTujuan;
     private ApiService apiService;
     private ApiServiceMidtrans apiServiceMidtrans;
     private String id_order, id, tipe, keb, tuj;
@@ -88,7 +90,6 @@ public class CetakActivity extends AppCompatActivity implements OnMapReadyCallba
         }
         if (tipe.equals("GOPAY")) {
             getDataGopay(id_order);
-            kodePembayaran.setVisibility(View.GONE);
         }
 
     }
@@ -105,6 +106,8 @@ public class CetakActivity extends AppCompatActivity implements OnMapReadyCallba
 
         apiService = ApiUtils.getApiSerives();
         apiServiceMidtrans = ApiUtils.getDatabase();
+
+        cardView = findViewById(R.id.cetak_showBarcode);
 
         linearLayout = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);
@@ -124,13 +127,17 @@ public class CetakActivity extends AppCompatActivity implements OnMapReadyCallba
             }
         });
 
-        keberangkatan = findViewById(R.id.cetak_keberangkatan);
+        keberangkatan = findViewById(R.id.cetak_namaTrayek);
         jumlahPesanan = findViewById(R.id.cetak_jumlahPesanan);
-        tglKeberangkatan = findViewById(R.id.cetak_tglKeberangkatan);
+        tglKeberangkatan = findViewById(R.id.cetak_waktu);
         status = findViewById(R.id.cetak_status);
         kodePembayaran = findViewById(R.id.cetak_kodePembayaran);
         tipePembayaran = findViewById(R.id.cetak_tipePembayaran);
         barcode = findViewById(R.id.cetak_barcode);
+        halteKeberangkatan = findViewById(R.id.cetak_keberangkatan);
+        halteTujuan = findViewById(R.id.cetak_tujuan);
+
+        Toast.makeText(CetakActivity.this, "Hola !", Toast.LENGTH_LONG).show();
 
         Intent getIntent = getIntent();
         id = getIntent.getStringExtra("id");
@@ -143,18 +150,23 @@ public class CetakActivity extends AppCompatActivity implements OnMapReadyCallba
 
         getDataDatabase();
 
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                if (statusApi.equals("READY") && statusMidtrans.equals("settlement")) {
-                    createBarcode(id);
-                } else if (statusApi.equals("PRINTED") && statusMidtrans.equals("settlement")) {
-                    Toast.makeText(CetakActivity.this, "Anda telah melakukan perjalanan", Toast.LENGTH_LONG).show();
-                } else if (statusApi.equals("READY") && statusMidtrans.equals("PENDING")) {
-                    Toast.makeText(CetakActivity.this, "Lakukan pembayaran terlebih dahulu", Toast.LENGTH_LONG).show();
-                }
+
+        new Handler().postDelayed(() -> {
+            if (statusApi.equals("READY") && statusMidtrans.equals("settlement")) {
+                status.setText("Telah Melakukan Pembayaran");
+                createBarcode(id);
+                cardView.setVisibility(View.VISIBLE);
+                Log.d("Status", "Barcode");
+            } else if (statusApi.equals("checked") && statusMidtrans.equals("settlement")) {
+                status.setText("Sudah Melakukan Perjalanan");
+                Log.d("Status", "Telah Melakukan Perjalanan");
+                Toast.makeText(CetakActivity.this, "Anda telah melakukan perjalanan", Toast.LENGTH_LONG).show();
+            } else if (statusApi.equals("READY") && statusMidtrans.equals("pending")) {
+                status.setText("Transaksi Pending, Lakukan Pembayaran !");
+                Log.d("Status", "Lakukan Pembayaran Dahulu");
+                Toast.makeText(CetakActivity.this, "Lakukan pembayaran terlebih dahulu", Toast.LENGTH_LONG).show();
             }
-        }, 1000);
+        }, 900);
     }
 
 
@@ -189,7 +201,9 @@ public class CetakActivity extends AppCompatActivity implements OnMapReadyCallba
                     DataToast dataToast = new DataToast();
                     dataToast.setStringApi(response.body().getStatusMessage());
                     status.setText(response.body().getStatusMessage());
+                    Log.d("Status", response.body().getTransactionStatus() + " GOPAY");
                     statusMidtrans = response.body().getTransactionStatus();
+                    kodePembayaran.setText(response.body().getStatusCode());
                 } else {
                     Toast.makeText(CetakActivity.this, response.message(), Toast.LENGTH_LONG).show();
                 }
@@ -250,13 +264,16 @@ public class CetakActivity extends AppCompatActivity implements OnMapReadyCallba
             @Override
             public void onResponse(Call<CetakTicketDB> call, Response<CetakTicketDB> response) {
                 if (response.isSuccessful()) {
-                    keberangkatan.setText(response.body().getKeberangkatan() + " => " + response.body().getTujuan());
-                    jumlahPesanan.setText(response.body().getJumlahTiket());
+                    keberangkatan.setText(response.body().getKeberangkatan() + " - " + response.body().getTujuan());
+                    jumlahPesanan.setText(response.body().getJumlahTiket() + " Orang");
                     tglKeberangkatan.setText(response.body().getTanggalPemesanan());
                     tipePembayaran.setText(response.body().getPaymentType());
+                    halteKeberangkatan.setText("Halte " + response.body().getKeberangkatan());
+                    halteTujuan.setText("Halte " + response.body().getTujuan());
                     DataToast dataToast = new DataToast();
                     dataToast.setStringApi(response.body().getStatus());
                     statusApi = response.body().getStatus();
+                    Log.d("Status", statusApi + " Database");
 //                    Toast.makeText(getApplicationContext(), dataToast.getStringApi(), Toast.LENGTH_LONG).show();
 //                    check(statusApi, null);
                 }
@@ -320,13 +337,13 @@ public class CetakActivity extends AppCompatActivity implements OnMapReadyCallba
         mMap.setTrafficEnabled(false);
 
         UiSettings mUiSettings = mMap.getUiSettings();
-        mUiSettings.setZoomControlsEnabled(true);
-        mUiSettings.setCompassEnabled(true);
-        mUiSettings.setMyLocationButtonEnabled(true);
+        mUiSettings.setZoomControlsEnabled(false);
+        mUiSettings.setCompassEnabled(false);
+        mUiSettings.setMyLocationButtonEnabled(false);
         mUiSettings.setScrollGesturesEnabled(true);
         mUiSettings.setZoomGesturesEnabled(true);
-        mUiSettings.setTiltGesturesEnabled(true);
-        mUiSettings.setRotateGesturesEnabled(true);
+        mUiSettings.setTiltGesturesEnabled(false);
+        mUiSettings.setRotateGesturesEnabled(false);
     }
 
     private void addMarkersToMap(DirectionsResult results, GoogleMap mMap) {

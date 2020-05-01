@@ -23,15 +23,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="android:allowBackup">
+        <activity android:name=".activity.angkot.ScanAngkotActivity"></activity>
         <activity
             android:name=".activity.damri.ListDamriActivity"
-            android:parentActivityName=".activity.HomePageActivity"></activity>
+            android:parentActivityName=".activity.HomePageActivity" />
         <activity
             android:name=".activity.angkot.PesanAngkotActivity"
             android:parentActivityName=".activity.HomePageActivity" />
         <activity android:name=".activity.HomePageActivity" />
         <activity android:name=".dashboard.CetakActivity" />
-        <activity android:name=".dashboard.HistoryActivity" />
+        <activity
+            android:name=".dashboard.HistoryActivity"
+            android:parentActivityName=".activity.HomePageActivity" />
         <activity android:name=".damri.CheckOutActivity" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

@@ -27,6 +27,7 @@ public class CetakTicketDB {
     @Expose
     private String status;
 
+
     public CetakTicketDB(String jumlahTiket, String orderId, String paymentType, String tanggalPemesanan, String keberangkatan, String tujuan, String status) {
         this.jumlahTiket = jumlahTiket;
         this.orderId = orderId;
