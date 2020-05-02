@@ -191,7 +191,7 @@
                         android:layout_centerVertical="true"
                         android:layout_marginTop="22dp"
                         android:fontFamily="@font/montserratbold"
-                        android:text="Riwayat Perjalanan"
+                        android:text="Perjalanan Hari Ini"
                         android:textColor="#000"
                         android:textSize="14sp" />
 
@@ -202,6 +202,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:text="Lihat Semua"
+                        android:textColor="#000"
                         android:textSize="12sp" />
                 </RelativeLayout>
 

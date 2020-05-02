@@ -28,134 +28,110 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserratbold"
-                    android:text="Pilih Keberangkatan"
+                    android:text="Pilih Halte Angkot"
                     android:textColor="#000"
                     android:textSize="16sp" />
             </RelativeLayout>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/formAngkot_refresh"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserratbold"
-            android:text="Keberangkatan :"
-            android:textSize="14sp" />
-
-        <org.angmarch.views.NiceSpinner
-            android:id="@+id/formAngkot_keberangkatan"
+        <LinearLayout
+            android:id="@+id/formAngkot_show"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/box_white"
-            android:textSize="13sp"
-            app:fontFamily="@font/montserratregular" />
+            android:layout_height="match_parent"
+            android:background="#fff"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/montserratbold"
-            android:text="Tujuan :"
-            android:textSize="14sp" />
-
-        <org.angmarch.views.NiceSpinner
-            android:id="@+id/formAngkot_tujuan"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="13sp"
-            app:fontFamily="@font/montserratregular" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/formAngkot_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:orientation="vertical">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/montserratbold"
-            android:text="Pilih Tanggal Keberangkatan"
-            android:textSize="14sp" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/formAngkot_currentDate"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/montserratregular"
-                android:textSize="14sp" />
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratbold"
+                    android:text="Trayek Angkot:"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
 
-        </RelativeLayout>
-    </LinearLayout>
+                <TextView
+                    android:id="@+id/formAngkot_trayek"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:fontFamily="@font/montserratregular"
+                    android:text="Jakarta - Bandung (PP)"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="18dp"
-        android:orientation="vertical">
+            </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/formAngkot_namaPemesan"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserratregular"
-                android:hint="Nama Pemesan"
-                android:inputType="textPersonName"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_marginTop="8dp"
+                android:background="#fff"
+                android:orientation="vertical">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            app:helperText="Maksimum 4 Orang">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratbold"
+                    android:text="Keberangkatan :"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
 
-            <EditText
-                android:id="@+id/formAngkot_jumlahPesanan"
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/formAngkot_keberangkatan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/box_white"
+                    android:textSize="13sp"
+                    app:fontFamily="@font/montserratregular" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:fontFamily="@font/montserratbold"
+                    android:text="Tujuan :"
+                    android:textColor="@color/black"
+                    android:textSize="14sp" />
+
+                <org.angmarch.views.NiceSpinner
+                    android:id="@+id/formAngkot_tujuan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="13sp"
+                    app:fontFamily="@font/montserratregular" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/montserratregular"
-                android:hint="Jumlah Pesanan"
-                android:inputType="numberSigned"
-                android:maxLength="1"
-                android:textSize="14sp" />
+                android:layout_marginTop="18dp"
+                android:orientation="vertical">
 
-        </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
 
+            <Button
+                android:id="@+id/formAngkot_pembayaran"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/box_blue"
+                android:fontFamily="@font/montserratbold"
+                android:text="Check Out"
+                android:textColor="@color/white" />
 
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/formAngkot_checkout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="21dp"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/box_blue"
-        android:fontFamily="@font/montserratbold"
-        android:text="Check Out"
-        android:textColor="@color/white" />
-
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

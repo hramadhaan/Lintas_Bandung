@@ -7,6 +7,8 @@ import com.lintasbandung.lintasbandungapps.models.GetHistoryTicket;
 import com.lintasbandung.lintasbandungapps.models.SpecificRuteDamri;
 import com.lintasbandung.lintasbandungapps.models.Status;
 import com.lintasbandung.lintasbandungapps.models.Token;
+import com.lintasbandung.lintasbandungapps.models.angkot.AngkotScan;
+import com.lintasbandung.lintasbandungapps.models.history.HistorySaatIni;
 import com.lintasbandung.lintasbandungapps.models.ticket.CetakTicketDB;
 
 
@@ -79,5 +81,16 @@ public interface ApiService {
     @GET("showSpecificOrder/{id}")
     Call<CetakTicketDB> getCetakDB(
             @Path("id") String id
+    );
+
+    @GET("angkotById/{id}")
+    Call<AngkotScan> getDataAngkot(
+            @Path("id") String id
+    );
+
+    @GET("usedByUserDate/{id}/{date}")
+    Call<ArrayList<HistorySaatIni>> getHistorySaatIni(
+            @Path("id") String id,
+            @Path("date") String date
     );
 }

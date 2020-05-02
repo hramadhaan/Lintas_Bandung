@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     tools:context=".activity.angkot.PesanAngkotActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -77,8 +78,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="12dp"
-        android:tooltipText="Pesan Angkot"
         android:backgroundTint="@color/bluePrimary"
-        android:src="@drawable/ic_scan_outline" />
+        android:src="@drawable/ic_scan_outline"
+        android:tooltipText="Pesan Angkot" />
 
 </RelativeLayout>

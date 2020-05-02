@@ -23,7 +23,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:replace="android:allowBackup">
-        <activity android:name=".activity.angkot.ScanAngkotActivity"></activity>
+        <activity
+            android:name=".activity.angkot.ScanAngkotActivity"
+            android:parentActivityName=".activity.angkot.PesanAngkotActivity"></activity>
         <activity
             android:name=".activity.damri.ListDamriActivity"
             android:parentActivityName=".activity.HomePageActivity" />

@@ -44,17 +44,17 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginVertical="15dp">
+            android:layout_marginVertical="8dp">
 
             <LinearLayout
                 android:id="@+id/pembayaran_atas"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="40dp"
+                android:layout_marginHorizontal="28dp"
                 android:background="@drawable/box_white"
                 android:orientation="vertical"
-                android:paddingHorizontal="40dp"
-                android:paddingVertical="30dp">
+                android:paddingHorizontal="18dp"
+                android:paddingVertical="25dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -66,6 +66,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserratbold"
                         android:text="Trayek Damri"
+                        android:textColor="#000"
                         android:textSize="14sp" />
 
                     <LinearLayout
@@ -82,9 +83,11 @@
                             android:id="@+id/checkOut_namaTrayek"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
                             android:fontFamily="@font/montserratregular"
                             android:text="Bandung - Kalijaga"
+                            android:textColor="#000"
                             android:textSize="13sp" />
 
                     </LinearLayout>
@@ -96,14 +99,17 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="14sp"
                     android:fontFamily="@font/montserratbold"
-                    android:text="Keberangkatan" />
+                    android:text="Keberangkatan"
+                    android:textColor="#000" />
 
                 <TextView
                     android:id="@+id/checkOut_keberangkatan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="12dp"
-                    android:text="Bogor" />
+                    android:fontFamily="@font/montserratregular"
+                    android:text="Bogor"
+                    android:textColor="#000" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -111,6 +117,7 @@
                     android:layout_marginTop="14sp"
                     android:fontFamily="@font/montserratbold"
                     android:text="Tujuan"
+                    android:textColor="#000"
                     android:textSize="14sp" />
 
                 <TextView
@@ -120,6 +127,7 @@
                     android:layout_marginLeft="12dp"
                     android:fontFamily="@font/montserratregular"
                     android:text="Jakarta"
+                    android:textColor="#000"
                     android:textSize="13sp" />
 
                 <LinearLayout
@@ -133,6 +141,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserratbold"
                         android:text="Nama Pemesan"
+                        android:textColor="#000"
                         android:textSize="14sp" />
 
                     <LinearLayout
@@ -149,8 +158,11 @@
                             android:id="@+id/checkOut_namaPemesan"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
-                            android:text="Hanfi Ramadhan" />
+                            android:fontFamily="@font/montserratregular"
+                            android:text="Hanfi Ramadhan"
+                            android:textColor="#000" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -165,6 +177,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserratbold"
                         android:text="Jumlah Pesanan"
+                        android:textColor="#000"
                         android:textSize="14sp" />
 
                     <TextView
@@ -173,6 +186,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserratregular"
                         android:text="4 Tiket"
+                        android:textColor="#000"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -187,6 +201,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserratbold"
                         android:text="Waktu Keberangkatan"
+                        android:textColor="#000"
                         android:textSize="14sp" />
 
                     <LinearLayout
@@ -203,9 +218,11 @@
                             android:id="@+id/checkOut_waktu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
                             android:layout_marginLeft="10dp"
                             android:fontFamily="@font/montserratregular"
                             android:text="23-01-1998"
+                            android:textColor="#000"
                             android:textSize="13sp" />
                     </LinearLayout>
                 </LinearLayout>
@@ -221,6 +238,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserratbold"
                         android:text="Harga"
+                        android:textColor="#000"
                         android:textSize="14sp" />
 
                     <TextView
@@ -229,6 +247,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/montserratregular"
                         android:text="Rp. 50.000"
+                        android:textColor="#000"
                         android:textSize="13sp" />
                 </LinearLayout>
 
@@ -239,8 +258,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/pembayaran_atas"
-                android:layout_marginHorizontal="40dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginHorizontal="28dp"
+                android:layout_marginTop="18dp"
                 android:layout_marginBottom="15dp"
                 android:orientation="vertical">
 
@@ -249,6 +268,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserratbold"
                     android:text="Pilih Pembayaran"
+                    android:textColor="#000"
                     android:textSize="14sp" />
 
                 <Button
@@ -256,28 +276,39 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:background="@color/zxing_transparent"
+                    android:background="@drawable/box_white"
                     android:drawableLeft="@drawable/ic_logo_indomaret_svg_240p___filevector69"
-                    android:elevation="8dp"
-                    android:text="Pembayaran Indomaret" />
+                    android:elevation="4dp"
+                    android:fontFamily="@font/montserratbold"
+                    android:paddingHorizontal="8dp"
+                    android:text="Pembayaran Indomaret"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/checkOut_mandiri"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="13dp"
-                    android:background="@color/zxing_transparent"
+                    android:background="@drawable/box_white"
                     android:drawableLeft="@drawable/mandiri"
-                    android:text="Pembayaran Mandiri" />
+                    android:elevation="4dp"
+                    android:fontFamily="@font/montserratbold"
+                    android:paddingHorizontal="8dp"
+                    android:text="Pembayaran Mandiri"
+                    android:textSize="13sp" />
 
                 <Button
                     android:id="@+id/checkOut_gojek"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="13dp"
-                    android:background="@color/zxing_transparent"
+                    android:background="@drawable/box_white"
                     android:drawableLeft="@drawable/ic_gopay"
-                    android:text="Pembayaran Gopay" />
+                    android:elevation="4dp"
+                    android:fontFamily="@font/montserratbold"
+                    android:paddingHorizontal="8dp"
+                    android:text="Pembayaran Gopay"
+                    android:textSize="13sp" />
 
             </LinearLayout>
 

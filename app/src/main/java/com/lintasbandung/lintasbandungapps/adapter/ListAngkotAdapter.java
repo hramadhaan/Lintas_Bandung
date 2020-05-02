@@ -49,6 +49,7 @@ public class ListAngkotAdapter extends RecyclerView.Adapter<ListAngkotAdapter.Vi
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, AngkotMapsActivity.class);
+                intent.putExtra("id", allAngkotArrayList.get(position).getId());
                 intent.putExtra("origin", allAngkotArrayList.get(position).getFrom().getPlaceName());
                 intent.putExtra("originLat", allAngkotArrayList.get(position).getFrom().getLatitude());
                 intent.putExtra("originLong", allAngkotArrayList.get(position).getFrom().getLongitude());

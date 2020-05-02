@@ -5,8 +5,9 @@
     android:layout_height="120dp"
     android:layout_marginVertical="7dp"
     android:background="@drawable/box_white"
-    android:elevation="9dp"
-    android:orientation="horizontal">
+    android:elevation="5dp"
+    android:orientation="horizontal"
+    android:paddingHorizontal="8dp">
 
     <ImageView
         android:id="@+id/listAngkotImage"

@@ -25,9 +25,11 @@ import com.midtrans.sdk.corekit.core.themes.CustomColorTheme;
 import com.midtrans.sdk.corekit.models.snap.TransactionResult;
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -94,9 +96,9 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
         keberangkatan.setText(sKeberangkatan);
         tujuan.setText(sTujuan);
         namaPemesan.setText(sNamaPemesan);
-        jumlahPemesan.setText(sJumlahPemesan);
+        jumlahPemesan.setText(sJumlahPemesan + " Tiket");
         waktu.setText(sWaktu);
-        jumlahHarga.setText(String.valueOf(totalHarga));
+        jumlahHarga.setText("Rp. " + NumberFormat.getNumberInstance(Locale.US).format(totalHarga));
         namaTrayek.setText(sTrayek);
 
 //        PEMBAYARAN
