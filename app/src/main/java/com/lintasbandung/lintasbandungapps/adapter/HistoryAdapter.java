@@ -11,6 +11,7 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.lintasbandung.lintasbandungapps.R;
+import com.lintasbandung.lintasbandungapps.models.GetHistoryTicket;
 import com.lintasbandung.lintasbandungapps.models.history.HistorySaatIni;
 
 import java.util.ArrayList;
@@ -18,9 +19,9 @@ import java.util.ArrayList;
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<HistorySaatIni> historySaatIniArrayList;
+    private ArrayList<GetHistoryTicket> historySaatIniArrayList;
 
-    public HistoryAdapter(Context context, ArrayList<HistorySaatIni> historySaatIniArrayList) {
+    public HistoryAdapter(Context context, ArrayList<GetHistoryTicket> historySaatIniArrayList) {
         this.context = context;
         this.historySaatIniArrayList = historySaatIniArrayList;
     }
@@ -35,8 +36,10 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.rute.setText(historySaatIniArrayList.get(position).getRute().getNamaTrayek());
-        holder.status.setText(historySaatIniArrayList.get(position).getTanggalPemesanan());
+        holder.rute.setText(historySaatIniArrayList.get(position).getKeberangkatan() + " - " + historySaatIniArrayList.get(position).getTujuan());
+        holder.type.setText(historySaatIniArrayList.get(position).getType());
+        holder.tanggal.setText(historySaatIniArrayList.get(position).getTanggal_pemesanan());
+        holder.tiket.setText(historySaatIniArrayList.get(position).getJumlahTiket() + " Tiket");
     }
 
     @Override
@@ -46,13 +49,15 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         private CardView listHistory;
-        private TextView rute, status;
+        private TextView type, rute, tanggal, tiket;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             listHistory = itemView.findViewById(R.id.listHistory);
+            type = itemView.findViewById(R.id.listHistory_type);
             rute = itemView.findViewById(R.id.listHistory_rute);
-            status = itemView.findViewById(R.id.listHistory_status);
+            tanggal = itemView.findViewById(R.id.listHistory_tanggal);
+            tiket = itemView.findViewById(R.id.listHistory_tiket);
         }
     }
 }

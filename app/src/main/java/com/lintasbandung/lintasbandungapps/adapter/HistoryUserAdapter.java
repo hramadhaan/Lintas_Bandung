@@ -37,8 +37,11 @@ public class HistoryUserAdapter extends RecyclerView.Adapter<HistoryUserAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, final int position) {
-        holder.rute.setText(getHistoryTicketList.get(position).getKeberangkatan() + " => " + getHistoryTicketList.get(position).getTujuan());
-        holder.status.setText(getHistoryTicketList.get(position).getTanggal_pemesanan());
+        holder.rute.setText(getHistoryTicketList.get(position).getKeberangkatan() + " - " + getHistoryTicketList.get(position).getTujuan());
+        holder.type.setText(getHistoryTicketList.get(position).getType());
+        holder.tanggal.setText(getHistoryTicketList.get(position).getTanggal_pemesanan());
+        holder.tiket.setText(getHistoryTicketList.get(position).getJumlahTiket() + " Tiket");
+
         holder.listHistory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -63,13 +66,15 @@ public class HistoryUserAdapter extends RecyclerView.Adapter<HistoryUserAdapter.
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private CardView listHistory;
-        private TextView rute, status;
+        private TextView type, rute, tanggal, tiket;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             listHistory = itemView.findViewById(R.id.listHistory);
+            type = itemView.findViewById(R.id.listHistory_type);
             rute = itemView.findViewById(R.id.listHistory_rute);
-            status = itemView.findViewById(R.id.listHistory_status);
+            tanggal = itemView.findViewById(R.id.listHistory_tanggal);
+            tiket = itemView.findViewById(R.id.listHistory_tiket);
         }
     }
 }

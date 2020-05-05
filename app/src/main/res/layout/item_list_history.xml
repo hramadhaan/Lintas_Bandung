@@ -3,36 +3,72 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/listHistory"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="80dp"
     android:layout_marginHorizontal="8dp"
     android:layout_marginVertical="5dp"
     android:background="#fff"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="8dp">
+    android:paddingHorizontal="10dp"
+    app:cardCornerRadius="5dp"
+    app:cardElevation="2dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingHorizontal="10dp">
 
-        <RelativeLayout
+        <ImageView
+            android:id="@+id/listHistory_gambar"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_directions_bus_black_24dp" />
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginHorizontal="12dp">
+            android:layout_marginLeft="25dp"
+            android:layout_toRightOf="@id/listHistory_gambar"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/listHistory_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserratbold"
+                android:text="Damri"
+                android:textAllCaps="true"
+                android:textColor="#000"
+                android:textSize="12sp" />
 
             <TextView
                 android:id="@+id/listHistory_rute"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true" />
+                android:fontFamily="@font/montserratbold"
+                android:text="Moh Toga - Pascal"
+                android:textAllCaps="true"
+                android:textColor="@color/bluePrimary"
+                android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/listHistory_status"
+                android:id="@+id/listHistory_tanggal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:textStyle="bold" />
-        </RelativeLayout>
+                android:fontFamily="@font/montserratregular"
+                android:text="Jumat, 23 Januari 1998"
+                android:textColor="#000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/listHistory_tiket"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/montserratregular"
+                android:text="4 Tiket"
+                android:textColor="#000"
+                android:textSize="13sp" />
+        </LinearLayout>
 
     </RelativeLayout>
 

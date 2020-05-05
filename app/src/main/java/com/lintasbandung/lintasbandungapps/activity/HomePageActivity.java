@@ -1,26 +1,31 @@
 package com.lintasbandung.lintasbandungapps.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.lintasbandung.lintasbandungapps.R;
 import com.lintasbandung.lintasbandungapps.activity.angkot.PesanAngkotActivity;
 import com.lintasbandung.lintasbandungapps.activity.damri.ListDamriActivity;
 import com.lintasbandung.lintasbandungapps.adapter.HistoryAdapter;
-import com.lintasbandung.lintasbandungapps.adapter.ListAngkotAdapter;
+import com.lintasbandung.lintasbandungapps.awalan.LoginActivity;
 import com.lintasbandung.lintasbandungapps.dashboard.HistoryActivity;
 import com.lintasbandung.lintasbandungapps.data.AppState;
+import com.lintasbandung.lintasbandungapps.models.GetHistoryTicket;
 import com.lintasbandung.lintasbandungapps.models.history.HistorySaatIni;
 import com.lintasbandung.lintasbandungapps.network.ApiService;
 import com.lintasbandung.lintasbandungapps.utils.ApiUtils;
@@ -72,6 +77,9 @@ public class HomePageActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(mLayoutManager);
 
         appState = AppState.getInstance();
+        if (!appState.isLoggedIn()) {
+            finish();
+        }
 
         nama.setText(appState.getUser().getFirstName() + " " + appState.getUser().getLastName());
         pesanAngkot.setOnClickListener(new View.OnClickListener() {
@@ -110,25 +118,30 @@ public class HomePageActivity extends AppCompatActivity {
     }
 
     private void getPerjalananHariIni(String id, String date) {
-        Call<ArrayList<HistorySaatIni>> historySaatIniCall = apiService.getHistorySaatIni(id, date);
-        historySaatIniCall.enqueue(new Callback<ArrayList<HistorySaatIni>>() {
+        Call<HistorySaatIni> historySaatIniCall = apiService.getHistorySaatIni(id, date);
+        historySaatIniCall.enqueue(new Callback<HistorySaatIni>() {
             @Override
-            public void onResponse(Call<ArrayList<HistorySaatIni>> call, Response<ArrayList<HistorySaatIni>> response) {
+            public void onResponse(Call<HistorySaatIni> call, Response<HistorySaatIni> response) {
                 if (response.isSuccessful()) {
                     refreshLayout.setRefreshing(false);
-                    ifNull.setVisibility(View.GONE);
-                    recyclerView.setVisibility(View.VISIBLE);
-                    ArrayList<HistorySaatIni> historySaatInis = response.body();
-                    mAdapter = new HistoryAdapter(HomePageActivity.this, historySaatInis);
+                    ArrayList<GetHistoryTicket> arrayList = response.body().getData();
+                    mAdapter = new HistoryAdapter(HomePageActivity.this, arrayList);
                     recyclerView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
+                    if (mAdapter.getItemCount() == 0) {
+                        ifNull.setVisibility(View.VISIBLE);
+                        recyclerView.setVisibility(View.GONE);
+                    } else {
+                        ifNull.setVisibility(View.GONE);
+                        recyclerView.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     showToast(response.message());
                 }
             }
 
             @Override
-            public void onFailure(Call<ArrayList<HistorySaatIni>> call, Throwable t) {
+            public void onFailure(Call<HistorySaatIni> call, Throwable t) {
                 showToast(t.getMessage());
             }
         });
@@ -136,5 +149,37 @@ public class HomePageActivity extends AppCompatActivity {
 
     private void showToast(String message) {
         Toast.makeText(HomePageActivity.this, message, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu_toolbar, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.toolbar_profile:
+                startActivity(new Intent(HomePageActivity.this, ProfileActivity.class));
+                break;
+            case R.id.toolbar_logout:
+                appState.logout();
+                startActivity(new Intent(HomePageActivity.this, LoginActivity.class));
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        appState = AppState.getInstance();
+        if (!appState.isLoggedIn()) {
+            startActivity(new Intent(HomePageActivity.this, LoginActivity.class));
+            finish();
+        }
     }
 }

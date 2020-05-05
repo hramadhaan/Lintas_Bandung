@@ -7,6 +7,7 @@ import com.lintasbandung.lintasbandungapps.models.GetHistoryTicket;
 import com.lintasbandung.lintasbandungapps.models.SpecificRuteDamri;
 import com.lintasbandung.lintasbandungapps.models.Status;
 import com.lintasbandung.lintasbandungapps.models.Token;
+import com.lintasbandung.lintasbandungapps.models.angkot.Angkot;
 import com.lintasbandung.lintasbandungapps.models.angkot.AngkotScan;
 import com.lintasbandung.lintasbandungapps.models.history.HistorySaatIni;
 import com.lintasbandung.lintasbandungapps.models.ticket.CetakTicketDB;
@@ -70,7 +71,8 @@ public interface ApiService {
             @Field("bill_key") String bill_key,
             @Field("biner_code") String biller_code,
             @Field("payment_type") String payment_type,
-            @Field("tanggal_pemesanan") String tanggal_pemesanan
+            @Field("tanggal_pemesanan") String tanggal_pemesanan,
+            @Field("type") String type
     );
 
     @GET("showUserOrder/{id}")
@@ -89,8 +91,23 @@ public interface ApiService {
     );
 
     @GET("usedByUserDate/{id}/{date}")
-    Call<ArrayList<HistorySaatIni>> getHistorySaatIni(
+    Call<HistorySaatIni> getHistorySaatIni(
             @Path("id") String id,
             @Path("date") String date
+    );
+
+    @FormUrlEncoded
+    @POST("editUser/{id}")
+    Call<Status> setEditUser(
+            @Path("id") String id,
+            @Field("first_name") String first_name,
+            @Field("last_name") String last_name,
+            @Field("email") String email,
+            @Field("phone") String phone
+    );
+
+    @GET("getSupir/{id}")
+    Call<Angkot> getSupir(
+            @Path("id") String id
     );
 }

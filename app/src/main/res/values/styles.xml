@@ -7,4 +7,9 @@
         <item name="colorAccent">@color/colorSecondary</item>
     </style>
 
+    <style name="LoginTextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense">
+        <item name="boxStrokeColor">@color/bluePrimary</item>
+        <item name="boxStrokeWidth">2dp</item>
+    </style>
+
 </resources>

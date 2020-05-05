@@ -2,6 +2,7 @@ package com.lintasbandung.lintasbandungapps.models.ticket;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.lintasbandung.lintasbandungapps.models.history.Rute;
 
 public class CetakTicketDB {
 
@@ -26,9 +27,11 @@ public class CetakTicketDB {
     @SerializedName("status")
     @Expose
     private String status;
+    @SerializedName("rute")
+    @Expose
+    private Rute rute;
 
-
-    public CetakTicketDB(String jumlahTiket, String orderId, String paymentType, String tanggalPemesanan, String keberangkatan, String tujuan, String status) {
+    public CetakTicketDB(String jumlahTiket, String orderId, String paymentType, String tanggalPemesanan, String keberangkatan, String tujuan, String status, Rute rute) {
         this.jumlahTiket = jumlahTiket;
         this.orderId = orderId;
         this.paymentType = paymentType;
@@ -36,6 +39,7 @@ public class CetakTicketDB {
         this.keberangkatan = keberangkatan;
         this.tujuan = tujuan;
         this.status = status;
+        this.rute = rute;
     }
 
     public String getJumlahTiket() {
@@ -92,5 +96,13 @@ public class CetakTicketDB {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Rute getRute() {
+        return rute;
+    }
+
+    public void setRute(Rute rute) {
+        this.rute = rute;
     }
 }

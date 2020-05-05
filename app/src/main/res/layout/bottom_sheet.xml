@@ -72,9 +72,9 @@
                         android:id="@+id/cetak_namaTrayek"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:fontFamily="@font/montserratregular"
-                        android:text="Bandung - Kalijaga"
                         android:textColor="#000"
                         android:textSize="13sp" />
 
@@ -95,7 +95,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
-                android:text="Bogor"
+                android:fontFamily="@font/montserratregular"
                 android:textColor="#000" />
 
             <TextView
@@ -113,7 +113,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:fontFamily="@font/montserratregular"
-                android:text="Jakarta"
                 android:textColor="#000"
                 android:textSize="13sp" />
 
@@ -145,8 +144,9 @@
                         android:id="@+id/cetak_namaPemesan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
-                        android:text="Hanfi Ramadhan"
+                        android:fontFamily="@font/montserratregular"
                         android:textColor="#000" />
                 </LinearLayout>
             </LinearLayout>
@@ -170,7 +170,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserratregular"
-                    android:text="4 Tiket"
                     android:textColor="#000"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -203,9 +202,9 @@
                         android:id="@+id/cetak_waktu"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:layout_marginLeft="10dp"
                         android:fontFamily="@font/montserratregular"
-                        android:text="23-01-1998"
                         android:textColor="#000"
                         android:textSize="13sp" />
                 </LinearLayout>
@@ -230,7 +229,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserratregular"
-                    android:text="Rp. 50.000"
                     android:textColor="#000"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -254,7 +252,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserratregular"
-                    android:text="Rp. 50.000"
                     android:textColor="#000"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -278,7 +275,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserratregular"
-                    android:text="1202160034"
                     android:textColor="#000"
                     android:textSize="13sp" />
             </LinearLayout>
@@ -302,7 +298,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserratregular"
-                    android:text="Berhasil"
                     android:textColor="#000"
                     android:textSize="13sp" />
             </LinearLayout>

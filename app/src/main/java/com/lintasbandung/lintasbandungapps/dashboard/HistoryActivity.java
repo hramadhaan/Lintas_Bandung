@@ -88,6 +88,8 @@ public class HistoryActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Tidak ada daftar angkot", Toast.LENGTH_LONG).show();
                     }
                 } else {
+                    ifNull.setVisibility(View.VISIBLE);
+                    recyclerView.setVisibility(View.GONE);
                     swipeRefreshLayout.setRefreshing(false);
                     Toast.makeText(HistoryActivity.this, response.message(), Toast.LENGTH_LONG).show();
                 }
@@ -97,6 +99,8 @@ public class HistoryActivity extends AppCompatActivity {
             public void onFailure(Call<List<GetHistoryTicket>> call, Throwable t) {
                 Toast.makeText(HistoryActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
                 swipeRefreshLayout.setRefreshing(false);
+                ifNull.setVisibility(View.VISIBLE);
+                recyclerView.setVisibility(View.GONE);
             }
         });
     }

@@ -1,21 +1,17 @@
-package com.lintasbandung.lintasbandungapps.models.history;
+package com.lintasbandung.lintasbandungapps.models.angkot;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import com.lintasbandung.lintasbandungapps.models.GetHistoryTicket;
 
-import java.util.ArrayList;
-
-public class HistorySaatIni {
+public class Angkot {
     @SerializedName("status")
     @Expose
     private String status;
-
     @SerializedName("data")
     @Expose
-    private ArrayList<GetHistoryTicket> data;
+    private DataAngkot data;
 
-    public HistorySaatIni(String status, ArrayList<GetHistoryTicket> data) {
+    public Angkot(String status, DataAngkot data) {
         this.status = status;
         this.data = data;
     }
@@ -28,11 +24,11 @@ public class HistorySaatIni {
         this.status = status;
     }
 
-    public ArrayList<GetHistoryTicket> getData() {
+    public DataAngkot getData() {
         return data;
     }
 
-    public void setData(ArrayList<GetHistoryTicket> data) {
+    public void setData(DataAngkot data) {
         this.data = data;
     }
 }

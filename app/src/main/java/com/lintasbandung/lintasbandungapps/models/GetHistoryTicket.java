@@ -2,6 +2,7 @@ package com.lintasbandung.lintasbandungapps.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.lintasbandung.lintasbandungapps.models.history.Rute;
 
 public class GetHistoryTicket {
     @SerializedName("id")
@@ -31,8 +32,14 @@ public class GetHistoryTicket {
     @SerializedName("payment_type")
     @Expose
     private String payment_type;
+    @SerializedName("rute")
+    @Expose
+    private Rute rute;
+    @SerializedName("type")
+    @Expose
+    private String type;
 
-    public GetHistoryTicket(String id, String jumlahTiket, String harga, String orderId, String status, String keberangkatan, String tujuan, String tanggal_pemesanan, String payment_type) {
+    public GetHistoryTicket(String id, String jumlahTiket, String harga, String orderId, String status, String keberangkatan, String tujuan, String tanggal_pemesanan, String payment_type, Rute rute, String type) {
         this.id = id;
         this.jumlahTiket = jumlahTiket;
         this.harga = harga;
@@ -42,6 +49,8 @@ public class GetHistoryTicket {
         this.tujuan = tujuan;
         this.tanggal_pemesanan = tanggal_pemesanan;
         this.payment_type = payment_type;
+        this.rute = rute;
+        this.type = type;
     }
 
     public String getId() {
@@ -114,5 +123,21 @@ public class GetHistoryTicket {
 
     public void setPayment_type(String payment_type) {
         this.payment_type = payment_type;
+    }
+
+    public Rute getRute() {
+        return rute;
+    }
+
+    public void setRute(Rute rute) {
+        this.rute = rute;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }

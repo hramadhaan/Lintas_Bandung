@@ -42,6 +42,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.Code128Writer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.lintasbandung.lintasbandungapps.R;
+import com.lintasbandung.lintasbandungapps.data.AppState;
 import com.lintasbandung.lintasbandungapps.models.DataToast;
 import com.lintasbandung.lintasbandungapps.models.midtrans.Gojek;
 import com.lintasbandung.lintasbandungapps.models.midtrans.Indomart;
@@ -54,8 +55,10 @@ import com.lintasbandung.lintasbandungapps.utils.ApiUtils;
 import org.joda.time.DateTime;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import retrofit2.Call;
@@ -78,6 +81,8 @@ public class CetakActivity extends AppCompatActivity implements OnMapReadyCallba
     private LinearLayout linearLayout;
     private static int overview = 0;
     private ImageView barcode;
+    private TextView namaPemesan, harga;
+    private AppState appState;
 
     @Override
     protected void onStart() {
@@ -104,10 +109,14 @@ public class CetakActivity extends AppCompatActivity implements OnMapReadyCallba
                 .findFragmentById(R.id.map_cetak);
         mapFragment.getMapAsync(this);
 
+        appState = AppState.getInstance();
+        harga = findViewById(R.id.cetak_jumlahHarga);
+
         apiService = ApiUtils.getApiSerives();
         apiServiceMidtrans = ApiUtils.getDatabase();
 
         cardView = findViewById(R.id.cetak_showBarcode);
+        namaPemesan = findViewById(R.id.cetak_namaPemesan);
 
         linearLayout = findViewById(R.id.bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(linearLayout);
@@ -264,9 +273,15 @@ public class CetakActivity extends AppCompatActivity implements OnMapReadyCallba
             @Override
             public void onResponse(Call<CetakTicketDB> call, Response<CetakTicketDB> response) {
                 if (response.isSuccessful()) {
-                    keberangkatan.setText(response.body().getKeberangkatan() + " - " + response.body().getTujuan());
-                    jumlahPesanan.setText(response.body().getJumlahTiket() + " Orang");
+
+                    int jumlahPenumpang = Integer.parseInt(response.body().getJumlahTiket());
+                    int total = jumlahPenumpang * 10000;
+
+                    keberangkatan.setText(response.body().getRute().getNamaTrayek());
+                    jumlahPesanan.setText(jumlahPenumpang + " Tiket");
+                    harga.setText("Rp. " + NumberFormat.getNumberInstance(Locale.US).format(total));
                     tglKeberangkatan.setText(response.body().getTanggalPemesanan());
+                    namaPemesan.setText(appState.getUser().getFirstName() + " " + appState.getUser().getLastName());
                     tipePembayaran.setText(response.body().getPaymentType());
                     halteKeberangkatan.setText("Halte " + response.body().getKeberangkatan());
                     halteTujuan.setText("Halte " + response.body().getTujuan());

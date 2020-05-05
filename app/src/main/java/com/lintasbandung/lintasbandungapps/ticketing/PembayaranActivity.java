@@ -168,7 +168,7 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
 //                    idUser = Integer.parseInt(transactionResult.getResponse().getOrderId());
                     Call<Status> statusSuccess = apiService.createOrder(sIdRute, a, totalHarga, transactionResult.getResponse().getOrderId(), idUser,
                             sKeberangkatan, sTujuan, "READY", "", "",
-                            kodePembayaran, sWaktu);
+                            kodePembayaran, sWaktu, "damri");
                     statusSuccess.enqueue(new Callback<Status>() {
                         @Override
                         public void onResponse(Call<Status> call, Response<Status> response) {
@@ -195,7 +195,7 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
 //                    idUser = Integer.parseInt(transactionResult.getResponse().getOrderId());
                     Call<Status> statusPending = apiService.createOrder(sIdRute, a, totalHarga, transactionResult.getResponse().getOrderId(), idUser,
                             sKeberangkatan, sTujuan, "READY", "", "",
-                            kodePembayaran, sWaktu);
+                            kodePembayaran, sWaktu, "damri");
                     statusPending.enqueue(new Callback<Status>() {
                         @Override
                         public void onResponse(Call<Status> call, Response<Status> response) {
@@ -221,7 +221,7 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
                 case TransactionResult.STATUS_FAILED:
                     Call<Status> statusFailed = apiService.createOrder(sIdRute, a, totalHarga, transactionResult.getResponse().getOrderId(), idUser,
                             sKeberangkatan, sTujuan, "READY", "", "",
-                            kodePembayaran, sWaktu);
+                            kodePembayaran, sWaktu, "damri");
                     statusFailed.enqueue(new Callback<Status>() {
                         @Override
                         public void onResponse(Call<Status> call, Response<Status> response) {
