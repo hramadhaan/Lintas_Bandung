@@ -8,12 +8,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.lintasbandung.lintasbandungapps.R;
 import com.lintasbandung.lintasbandungapps.angkot.AngkotMapsActivity;
 import com.lintasbandung.lintasbandungapps.models.AllAngkot;

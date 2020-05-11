@@ -137,7 +137,7 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/box_blue"
             android:fontFamily="@font/montserratbold"
-            android:text="Update"
+            android:text="Ubah Nomor Telepon"
             android:textColor="#fff"
             android:textSize="14sp" />
     </LinearLayout>

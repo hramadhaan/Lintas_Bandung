@@ -2,7 +2,6 @@ package com.lintasbandung.lintasbandungapps.activity.damri;
 
 import android.os.Bundle;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -21,6 +20,7 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import xyz.hasnat.sweettoast.SweetToast;
 
 public class ListDamriActivity extends AppCompatActivity {
 
@@ -73,20 +73,32 @@ public class ListDamriActivity extends AppCompatActivity {
                     recyclerView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                     if (mAdapter.getItemCount() == 0) {
-                        Toast.makeText(getApplicationContext(), "Tidak ada rute damri", Toast.LENGTH_LONG).show();
+                        showInfoToast("Data tidak ada");
                         refreshLayout.setRefreshing(false);
                     }
                 } else {
-                    Toast.makeText(getApplicationContext(), response.message(), Toast.LENGTH_LONG).show();
+                    showInfoToast(response.message());
                     refreshLayout.setRefreshing(false);
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<AllDamri>> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), t.getMessage(), Toast.LENGTH_LONG).show();
+                showErrorToast(t.getMessage());
                 refreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    private void showErrorToast(String message) {
+        SweetToast.error(ListDamriActivity.this, message, 2200);
+    }
+
+    private void showInfoToast(String message) {
+        SweetToast.warning(ListDamriActivity.this, message, 2200);
+    }
+
+    private void showSuccessToast(String message) {
+        SweetToast.success(ListDamriActivity.this, message, 2200);
     }
 }

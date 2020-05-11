@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputFilter;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -50,7 +49,6 @@ public class FormOrderingTicket extends AppCompatActivity {
     private int year, month, day;
     private String waktu, rute;
     private Toolbar toolbar;
-    private TextView judul;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +56,6 @@ public class FormOrderingTicket extends AppCompatActivity {
         setContentView(R.layout.activity_form_ordering_ticket);
 
         toolbar = findViewById(R.id.fromOrder_toolbar);
-        judul = toolbar.findViewById(R.id.fromOrder_judul);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
@@ -93,7 +90,6 @@ public class FormOrderingTicket extends AppCompatActivity {
 
         getData();
 
-
         checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,9 +100,9 @@ public class FormOrderingTicket extends AppCompatActivity {
                 sJumlahPemesan = jumlahPemesan.getText().toString();
 
                 if (sKeberangkatan.equals(sTujuan)) {
-                    SweetToast.error(FormOrderingTicket.this, "Keberangkatan dan Tujuan Tidak Boleh Sama", duration);
+                    showInfoToast("Keberangkatan dan Tujuan tidak boleh sama");
                 } else if (sNamaPemesan.isEmpty() || sJumlahPemesan.isEmpty() || currentDate.getText().equals("")) {
-                    SweetToast.error(FormOrderingTicket.this, "Data Harus Diisi", duration);
+                    showInfoToast("Data Anda harus diisi");
                 } else {
                     Intent intent = new Intent(FormOrderingTicket.this, PembayaranActivity.class);
                     intent.putExtra("namaTrayek", b);
@@ -124,6 +120,18 @@ public class FormOrderingTicket extends AppCompatActivity {
         });
     }
 
+    private void showErrorToast(String message) {
+        SweetToast.error(FormOrderingTicket.this, message, 2200);
+    }
+
+    private void showInfoToast(String message) {
+        SweetToast.warning(FormOrderingTicket.this, message, 2200);
+    }
+
+    private void showSuccessToast(String message) {
+        SweetToast.success(FormOrderingTicket.this, message, 2200);
+    }
+
     private void getData() {
         Call<SpecificRuteDamri> specificRuteDamriCall = apiService.getSpecificRoute(a);
         specificRuteDamriCall.enqueue(new Callback<SpecificRuteDamri>() {
@@ -131,7 +139,7 @@ public class FormOrderingTicket extends AppCompatActivity {
             public void onResponse(Call<SpecificRuteDamri> call, Response<SpecificRuteDamri> response) {
                 if (response.isSuccessful()) {
                     if (response.body() == null) {
-                        SweetToast.error(getApplicationContext(), "Data Kosong", duration);
+                        showInfoToast("Data Kosong");
                     } else {
                         getTrayek = response.body().getTrayek();
                         keberangkatan.attachDataSource(getTrayek);
@@ -140,13 +148,13 @@ public class FormOrderingTicket extends AppCompatActivity {
                         rute = response.body().getId();
                     }
                 } else {
-                    SweetToast.error(getApplicationContext(), response.message(), duration);
+                    showInfoToast(response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<SpecificRuteDamri> call, Throwable t) {
-                SweetToast.error(getApplicationContext(), t.getMessage(), duration);
+                showErrorToast(t.getMessage());
             }
         });
     }
@@ -162,7 +170,6 @@ public class FormOrderingTicket extends AppCompatActivity {
                 String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(c.getTime());
                 currentDate.setText(currentDateString);
                 waktu = new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
-                Log.d("Waktu", waktu);
             }
         }, year, month, day);
         //disaple past date

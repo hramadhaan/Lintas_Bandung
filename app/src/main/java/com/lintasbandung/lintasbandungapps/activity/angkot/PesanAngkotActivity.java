@@ -3,7 +3,6 @@ package com.lintasbandung.lintasbandungapps.activity.angkot;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +26,7 @@ import java.util.ArrayList;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import xyz.hasnat.sweettoast.SweetToast;
 
 public class PesanAngkotActivity extends AppCompatActivity {
 
@@ -104,7 +104,7 @@ public class PesanAngkotActivity extends AppCompatActivity {
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (intentResult != null) {
             if (intentResult.getContents() == null) {
-                showToast("Cancelled");
+                showInfoToast("Scan dibatalkan");
             } else {
                 id = intentResult.getContents();
                 sendToForm(id);
@@ -144,21 +144,29 @@ public class PesanAngkotActivity extends AppCompatActivity {
                     recyclerView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                     if (mAdapter.getItemCount() == 0) {
-                        showToast("Data Angkot Tidak Ada");
+                        showInfoToast("Data Angkot Tidak Ada");
                     }
                 } else {
-                    showToast(response.message());
+                    showInfoToast(response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<ArrayList<AllAngkot>> call, Throwable t) {
-                showToast(t.getMessage());
+                showErrorToast(t.getMessage());
             }
         });
     }
 
-    private void showToast(String message) {
-        Toast.makeText(PesanAngkotActivity.this, message, Toast.LENGTH_LONG).show();
+    private void showErrorToast(String message) {
+        SweetToast.error(PesanAngkotActivity.this, message, 2200);
+    }
+
+    private void showInfoToast(String message) {
+        SweetToast.warning(PesanAngkotActivity.this, message, 2200);
+    }
+
+    private void showSuccessToast(String message) {
+        SweetToast.success(PesanAngkotActivity.this, message, 2200);
     }
 }

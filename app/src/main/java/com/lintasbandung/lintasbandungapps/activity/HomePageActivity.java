@@ -6,10 +6,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +38,7 @@ import java.util.Date;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import xyz.hasnat.sweettoast.SweetToast;
 
 public class HomePageActivity extends AppCompatActivity {
 
@@ -61,6 +63,13 @@ public class HomePageActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.home_toolbar);
         judul = toolbar.findViewById(R.id.home_judul);
         setSupportActionBar(toolbar);
+
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.black));
+        }
 
         apiService = ApiUtils.getApiSerives();
 
@@ -136,19 +145,27 @@ public class HomePageActivity extends AppCompatActivity {
                         recyclerView.setVisibility(View.VISIBLE);
                     }
                 } else {
-                    showToast(response.message());
+                    showInfoToast(response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<HistorySaatIni> call, Throwable t) {
-                showToast(t.getMessage());
+                showErrorToast(t.getMessage());
             }
         });
     }
 
-    private void showToast(String message) {
-        Toast.makeText(HomePageActivity.this, message, Toast.LENGTH_LONG).show();
+    private void showErrorToast(String message) {
+        SweetToast.error(HomePageActivity.this, message, 2200);
+    }
+
+    private void showInfoToast(String message) {
+        SweetToast.warning(HomePageActivity.this, message, 2200);
+    }
+
+    private void showSuccessToast(String message) {
+        SweetToast.success(HomePageActivity.this, message, 2200);
     }
 
     @Override

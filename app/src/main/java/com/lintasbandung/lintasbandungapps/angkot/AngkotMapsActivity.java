@@ -1,10 +1,5 @@
 package com.lintasbandung.lintasbandungapps.angkot;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
@@ -15,7 +10,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -35,9 +34,7 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.TravelMode;
 import com.lintasbandung.lintasbandungapps.R;
-import com.lintasbandung.lintasbandungapps.activity.angkot.PesanAngkotActivity;
 import com.lintasbandung.lintasbandungapps.adapter.AngkotMapsAdapter;
-import com.lintasbandung.lintasbandungapps.dashboard.CetakActivity;
 import com.lintasbandung.lintasbandungapps.models.angkot.AngkotScan;
 import com.lintasbandung.lintasbandungapps.network.ApiService;
 import com.lintasbandung.lintasbandungapps.utils.ApiUtils;
@@ -54,15 +51,14 @@ import java.util.concurrent.TimeUnit;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import xyz.hasnat.sweettoast.SweetToast;
 
 public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
     private String getFromLat, getFromLong;
     private String getToLat, getToLong, getHarga, getJarakKm;
     private long getJarak;
     private String id;
-    private LatLng origins, destinations;
     private static final int overview = 0;
     private BottomSheetBehavior bottomSheetBehavior;
     private ApiService apiService;
@@ -99,7 +95,6 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
 
             }
         });
-
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
 
         Intent getIntent = getIntent();
@@ -108,7 +103,6 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
         getFromLong = getIntent.getStringExtra("originLong");
         getToLat = getIntent.getStringExtra("destinationLat");
         getToLong = getIntent.getStringExtra("destinationLong");
-
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -120,17 +114,11 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
         new Handler().postDelayed(() -> {
             int hargaInt = Integer.parseInt(getHarga);
             int jarakInt = (int) getJarak;
-
             int total = hargaInt * (jarakInt / 1000);
-            Log.d("Jarak", String.valueOf(NumberFormat.getNumberInstance(Locale.US).format(total)));
-
             String totalString = String.valueOf(NumberFormat.getNumberInstance(Locale.US).format(total));
-
             harga.setText("Rp. " + totalString);
             jarak.setText(getJarakKm);
         }, 1100);
-
-
     }
 
     private void getDatabase(String id) {
@@ -147,25 +135,19 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
                     recyclerView.setAdapter(mAdapter);
                     mAdapter.notifyDataSetChanged();
                 } else {
-                    showToast(response.message());
-
+                    showInfoToast(response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<AngkotScan> call, Throwable t) {
-
+                showErrorToast(t.getMessage());
             }
         });
     }
 
-    private void showToast(String message) {
-        Toast.makeText(AngkotMapsActivity.this, message, Toast.LENGTH_LONG).show();
-    }
-
     private DirectionsResult getDirectionsDetails(String origin, String destination, TravelMode mode) {
         DateTime now = new DateTime();
-
         try {
             return DirectionsApi.newRequest(getGeoContext()).mode(mode).origin(origin).destination(destination).departureTime(now).await();
         } catch (ApiException e) {
@@ -182,16 +164,16 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
         try {
             boolean isSuccess = googleMap.setMapStyle(
                     MapStyleOptions.loadRawResourceStyle(this, R.raw.map_style)
             );
             if (!isSuccess) {
-                Toast.makeText(AngkotMapsActivity.this, "Map Style Tidak Berfungsi", Toast.LENGTH_LONG).show();
+                showInfoToast("Map style tidak berfungsi");
             }
         } catch (Resources.NotFoundException e) {
             e.printStackTrace();
+            showErrorToast(e.getMessage());
         }
 
         setupGoogleMapScreenSettings(googleMap);
@@ -201,10 +183,6 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
             positionCamera(results.routes[overview], googleMap);
             addMarkersToMap(results, googleMap);
         }
-
-        Log.d("MAPS", origins + "\n" + destinations);
-
-        Log.d("onMapReady", results.routes[overview].fare.value.toString());
     }
 
     private void setupGoogleMapScreenSettings(GoogleMap mMap) {
@@ -233,13 +211,7 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
 
     private void addPolyline(DirectionsResult results, GoogleMap mMap) {
         List<LatLng> decodedPath = PolyUtil.decode(results.routes[overview].overviewPolyline.getEncodedPath());
-//        List<PatternItem> patternItems = Arrays.<PatternItem>asList(
-//                new Dot(),new Gap(20), new Dash(30),new Gap(20)
         mMap.addPolyline(new PolylineOptions().addAll(decodedPath).width(10).color(Color.WHITE));
-
-        List<LatLng> decodedStes = PolyUtil.decode(results.routes[overview].legs[overview].steps[overview].polyline.getEncodedPath());
-        mMap.addPolyline(new PolylineOptions().addAll(decodedStes).width(10).color(Color.GREEN));
-
     }
 
     private String getEndLocationTitle(DirectionsResult results) {
@@ -256,5 +228,17 @@ public class AngkotMapsActivity extends FragmentActivity implements OnMapReadyCa
                 .setConnectTimeout(1, TimeUnit.SECONDS)
                 .setReadTimeout(1, TimeUnit.SECONDS)
                 .setWriteTimeout(1, TimeUnit.SECONDS);
+    }
+
+    private void showErrorToast(String message) {
+        SweetToast.error(AngkotMapsActivity.this, message, 2200);
+    }
+
+    private void showInfoToast(String message) {
+        SweetToast.warning(AngkotMapsActivity.this, message, 2200);
+    }
+
+    private void showSuccessToast(String message) {
+        SweetToast.success(AngkotMapsActivity.this, message, 2200);
     }
 }

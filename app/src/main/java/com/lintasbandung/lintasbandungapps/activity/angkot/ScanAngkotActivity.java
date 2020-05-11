@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -14,17 +13,15 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.lintasbandung.lintasbandungapps.R;
 import com.lintasbandung.lintasbandungapps.models.angkot.Angkot;
-import com.lintasbandung.lintasbandungapps.models.angkot.AngkotScan;
 import com.lintasbandung.lintasbandungapps.network.ApiService;
 import com.lintasbandung.lintasbandungapps.utils.ApiUtils;
 
 import org.angmarch.views.NiceSpinner;
 
-import java.util.ArrayList;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import xyz.hasnat.sweettoast.SweetToast;
 
 public class ScanAngkotActivity extends AppCompatActivity {
 
@@ -34,9 +31,7 @@ public class ScanAngkotActivity extends AppCompatActivity {
     private Button checkOut;
     private TextView namaPetugas, noPol;
     private ApiService apiService;
-    private ArrayList<String> listTrayek;
     private SwipeRefreshLayout refreshLayout;
-    private String hargaPerKm, kodeAngkot, setKeberangkatan, setTujuan;
     private Toolbar toolbar;
 
     @Override
@@ -76,7 +71,7 @@ public class ScanAngkotActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (keberangkatan.getSelectedItem().toString().equals(tujuan.getSelectedItem().toString())) {
-                    showToast("Keberangkatan dan Tujuan tidak boleh sama");
+                    showInfoToast("Keberangkatan dan Tujuan tidak boleh sama");
                 } else {
                     Intent intent = new Intent(ScanAngkotActivity.this, CheckOutAngkotActivity.class);
                     intent.putExtra("keberangkatan", keberangkatan.getSelectedItem().toString());
@@ -106,7 +101,7 @@ public class ScanAngkotActivity extends AppCompatActivity {
                     harga = response.body().getData().getTrayek().getTarif();
                     id_rute = response.body().getData().getTrayek().getId();
                 } else {
-                    showToast(response.message());
+                    showInfoToast(response.message());
                     refreshLayout.setRefreshing(false);
                     linearLayout.setVisibility(View.GONE);
                 }
@@ -114,14 +109,22 @@ public class ScanAngkotActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<Angkot> call, Throwable t) {
-                showToast(t.getMessage());
+                showErrorToast(t.getMessage());
                 refreshLayout.setRefreshing(false);
                 linearLayout.setVisibility(View.GONE);
             }
         });
     }
 
-    private void showToast(String message) {
-        Toast.makeText(ScanAngkotActivity.this, message, Toast.LENGTH_LONG).show();
+    private void showErrorToast(String message) {
+        SweetToast.error(ScanAngkotActivity.this, message, 2200);
+    }
+
+    private void showInfoToast(String message) {
+        SweetToast.warning(ScanAngkotActivity.this, message, 2200);
+    }
+
+    private void showSuccessToast(String message) {
+        SweetToast.success(ScanAngkotActivity.this, message, 2200);
     }
 }

@@ -3,7 +3,6 @@ package com.lintasbandung.lintasbandungapps.dashboard;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,6 +22,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import xyz.hasnat.sweettoast.SweetToast;
 
 public class HistoryActivity extends AppCompatActivity {
 
@@ -85,23 +85,35 @@ public class HistoryActivity extends AppCompatActivity {
                     if (mAdapter.getItemCount() == 0) {
                         swipeRefreshLayout.setRefreshing(false);
                         ifNull.setVisibility(View.VISIBLE);
-                        Toast.makeText(getApplicationContext(), "Tidak ada daftar angkot", Toast.LENGTH_LONG).show();
+                        showInfoToast("Tidak ada data");
                     }
                 } else {
                     ifNull.setVisibility(View.VISIBLE);
                     recyclerView.setVisibility(View.GONE);
                     swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(HistoryActivity.this, response.message(), Toast.LENGTH_LONG).show();
+                    showInfoToast(response.message());
                 }
             }
 
             @Override
             public void onFailure(Call<List<GetHistoryTicket>> call, Throwable t) {
-                Toast.makeText(HistoryActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                showErrorToast(t.getMessage());
                 swipeRefreshLayout.setRefreshing(false);
                 ifNull.setVisibility(View.VISIBLE);
                 recyclerView.setVisibility(View.GONE);
             }
         });
+    }
+
+    private void showErrorToast(String message) {
+        SweetToast.error(HistoryActivity.this, message, 2200);
+    }
+
+    private void showInfoToast(String message) {
+        SweetToast.warning(HistoryActivity.this, message, 2200);
+    }
+
+    private void showSuccessToast(String message) {
+        SweetToast.success(HistoryActivity.this, message, 2200);
     }
 }

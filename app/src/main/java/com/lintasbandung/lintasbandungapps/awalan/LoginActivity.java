@@ -24,7 +24,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.maps.errors.ApiException;
 import com.lintasbandung.lintasbandungapps.R;
 import com.lintasbandung.lintasbandungapps.activity.HomePageActivity;
@@ -37,6 +36,7 @@ import com.lintasbandung.lintasbandungapps.utils.ApiUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import xyz.hasnat.sweettoast.SweetToast;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -97,16 +97,16 @@ public class LoginActivity extends AppCompatActivity {
         String string_email = email.getText().toString();
         String string_password = password.getText().toString();
 
-        if (string_email.matches("")) {
-            Toast.makeText(LoginActivity.this, "Masukkan E-Mail Anda !", Toast.LENGTH_LONG).show();
+        if (string_email.matches("") && string_password.matches("")) {
+            showInfoToast("Masukkan Email dan Password Anda");
             signIn.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         } else if (string_password.matches("")) {
-            Toast.makeText(LoginActivity.this, "Masukkan Password Anda !", Toast.LENGTH_LONG).show();
+            showInfoToast("Masukkan Password Anda");
             signIn.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
-        } else if (string_email.matches("") && string_password.matches("")) {
-            Toast.makeText(LoginActivity.this, "Masukkan E-Mail dan Password Anda !", Toast.LENGTH_LONG).show();
+        } else if (string_email.matches("")) {
+            showInfoToast("Masukkan E-Mail");
             signIn.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         } else {
@@ -118,16 +118,13 @@ public class LoginActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         String hasilToken = response.body().getToken();
                         if (hasilToken.equals("false")) {
-//                        Toast.makeText(LoginActivity.this, "E-Mail atau Password tidak ada", Toast.LENGTH_LONG).show();
-                            Snackbar snackbar = Snackbar.make(login, "E-Mail atau Password belum terdaftar", Snackbar.LENGTH_LONG);
-                            snackbar.show();
+                            showErrorToast("E-Mail atau Password anda salah");
                             signIn.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
                         } else {
                             appState.setToken(hasilToken);
                             appState.setIsLoggedIn(true);
                             getUser();
-                            signOut();
                             signIn.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
                         }
@@ -135,17 +132,30 @@ public class LoginActivity extends AppCompatActivity {
                         Toast.makeText(LoginActivity.this, response.message(), Toast.LENGTH_LONG).show();
                         signIn.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
+                        showInfoToast(response.message());
                     }
                 }
 
                 @Override
                 public void onFailure(Call<Token> call, Throwable t) {
-                    Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                    showErrorToast(t.getMessage());
                     signIn.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
                 }
             });
         }
+    }
+
+    private void showErrorToast(String message) {
+        SweetToast.error(LoginActivity.this, message, 2200);
+    }
+
+    private void showInfoToast(String message) {
+        SweetToast.warning(LoginActivity.this, message, 2200);
+    }
+
+    private void showSuccessToast(String message) {
+        SweetToast.success(LoginActivity.this, message, 2200);
     }
 
     private void closeKeyboard() {
@@ -166,13 +176,13 @@ public class LoginActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else {
-                    Toast.makeText(LoginActivity.this, response.message(), Toast.LENGTH_LONG).show();
+                    showInfoToast("Informasi user tidak ada");
                 }
             }
 
             @Override
             public void onFailure(Call<DataUser> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, t.getMessage(), Toast.LENGTH_LONG).show();
+                showErrorToast("Kesalahan pada server");
             }
         });
     }
@@ -195,15 +205,14 @@ public class LoginActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             if (account == null) {
-                Toast.makeText(LoginActivity.this, "Account Tidak Ada", Toast.LENGTH_LONG).show();
+                showInfoToast("Akun G-Mail tidak terdaftar");
                 signOut();
             } else {
-//                Toast.makeText(LoginActivity.this, account.getGivenName() + " " + account.getFamilyName(), Toast.LENGTH_LONG).show();
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             }
         } catch (ApiException e) {
             e.printStackTrace();
-            Log.e("handleSignUpResult", e.toString());
+            showErrorToast(e.getMessage());
         }
     }
 

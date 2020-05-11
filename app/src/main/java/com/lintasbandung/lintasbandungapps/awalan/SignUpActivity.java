@@ -9,7 +9,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,6 +28,7 @@ import com.lintasbandung.lintasbandungapps.utils.ApiUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import xyz.hasnat.sweettoast.SweetToast;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -69,15 +69,13 @@ public class SignUpActivity extends AppCompatActivity {
             firstName.setText(acct.getGivenName());
             lastName.setText(acct.getFamilyName());
             email.setText(acct.getEmail());
-
             firstName.setEnabled(false);
             lastName.setEnabled(false);
             email.setEnabled(false);
-
             numbPhone.requestFocus();
         } else {
             finish();
-            showToast("Tidak ada data Google Account");
+            showErrorToast("Akun G-Mail anda tidak ada, coba ulangi lagi");
         }
         signOut();
 
@@ -90,6 +88,18 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
+    private void showErrorToast(String message) {
+        SweetToast.error(SignUpActivity.this, message, 2200);
+    }
+
+    private void showInfoToast(String message) {
+        SweetToast.warning(SignUpActivity.this, message, 2200);
+    }
+
+    private void showSuccessToast(String message) {
+        SweetToast.success(SignUpActivity.this, message, 2200);
+    }
+
     private void signUp() {
         submit.setVisibility(View.GONE);
         progressBar.setVisibility(View.VISIBLE);
@@ -100,8 +110,16 @@ public class SignUpActivity extends AppCompatActivity {
         String string_password = password.getText().toString();
 
         closeKeyboard();
-        if (string_email.equals("") && string_firstName.equals("") && string_lastName.equals("") && string_phone.equals("") && string_password.equals("")) {
-            showToast("Wajib isi data Anda");
+        if (string_phone.equals("") && string_password.equals("")) {
+            showInfoToast("Masukkan Nomor Telepon dan Password Anda");
+            submit.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        } else if (string_phone.equals("")) {
+            showInfoToast("Masukkan No. Telepon Anda");
+            submit.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.GONE);
+        } else if (string_password.equals("")) {
+            showInfoToast("Masukkan Password Anda");
             submit.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         } else {
@@ -115,18 +133,17 @@ public class SignUpActivity extends AppCompatActivity {
                             progressBar.setVisibility(View.GONE);
                             finish();
                             signOut();
-                            showToast("Akun anda terdaftar, silahkan login !");
                         } else if (response.body().getStatus().equals("gagal")) {
-                            showToast("Gagal mendaftarkan akun atau akun Anda telah terdaftar");
+                            showInfoToast("Akun Anda telah terdaftar");
                             submit.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
                         } else {
                             submit.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
-                            showToast("Terjadi kesalahan error");
+                            showErrorToast("Terjadi kesalahan error");
                         }
                     } else {
-                        showToast(response.message());
+                        showInfoToast(response.message());
                         submit.setVisibility(View.VISIBLE);
                         progressBar.setVisibility(View.GONE);
                     }
@@ -134,7 +151,7 @@ public class SignUpActivity extends AppCompatActivity {
 
                 @Override
                 public void onFailure(Call<Status> call, Throwable t) {
-                    showToast(t.getMessage());
+                    showErrorToast(t.getMessage());
                     submit.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.GONE);
                 }
@@ -154,12 +171,8 @@ public class SignUpActivity extends AppCompatActivity {
         googleSignInClient.signOut().addOnCompleteListener(this, new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-//                Toast.makeText(SignUpActivity.this, "Gagal Membuat Akun", Toast.LENGTH_LONG).show();
+                showInfoToast("Anda telah keluar dari akun Google Anda");
             }
         });
-    }
-
-    private void showToast(String message) {
-        Toast.makeText(SignUpActivity.this, message, Toast.LENGTH_LONG).show();
     }
 }

@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/toolbar_profile"
-        android:title="Profile"
+        android:title="Profil Pengguna"
         app:showAsAction="never" />
     <item
         android:id="@+id/toolbar_logout"
-        android:title="Logout"
+        android:title="Keluar"
         app:showAsAction="never" />
 </menu>

@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -26,9 +25,6 @@ import com.midtrans.sdk.corekit.models.snap.TransactionResult;
 import com.midtrans.sdk.uikit.SdkUIFlowBuilder;
 
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Locale;
 
 import retrofit2.Call;
@@ -153,9 +149,7 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
     public void onTransactionFinished(final TransactionResult transactionResult) {
         if (transactionResult.getResponse() != null) {
             String hasil = transactionResult.getResponse().getPaymentType();
-
             String kodePembayaran;
-
             if (hasil.equals("gopay")) {
                 kodePembayaran = "GOPAY";
             } else if (hasil.equals("cstore")) {
@@ -174,19 +168,19 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
                         public void onResponse(Call<Status> call, Response<Status> response) {
                             if (response.isSuccessful()) {
                                 if (response.body().getStatus().equals("success")) {
-                                    SweetToast.success(PembayaranActivity.this, "Transaction Finished ID : " + transactionResult.getResponse().getOrderId(), duration);
+                                    showSuccessToast("Transaksi berhasil pada ID : " + transactionResult.getResponse().getOrderId());
                                     finish();
                                 } else {
-                                    SweetToast.error(PembayaranActivity.this, "Update tidak sukses, coba ulangi", duration);
+                                    showInfoToast("Kesalahan pada input data di server");
                                 }
                             } else {
-                                SweetToast.error(PembayaranActivity.this, response.message(), duration);
+                                showInfoToast(response.message());
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Status> call, Throwable t) {
-                            SweetToast.error(PembayaranActivity.this, t.getMessage(), duration);
+                            showErrorToast(t.getMessage());
                         }
                     });
 
@@ -201,19 +195,19 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
                         public void onResponse(Call<Status> call, Response<Status> response) {
                             if (response.isSuccessful()) {
                                 if (response.body().getStatus().equals("success")) {
-                                    SweetToast.info(PembayaranActivity.this, "Transaction PENDING ID : " + transactionResult.getResponse().getOrderId(), duration);
+                                    showSuccessToast("Transaksi tertunda pada ID : " + transactionResult.getResponse().getOrderId());
                                     finish();
                                 } else {
-                                    SweetToast.error(PembayaranActivity.this, "Update tidak sukses, coba ulangi", duration);
+                                    showInfoToast("Kesalahan pada input data di server");
                                 }
                             } else {
-                                SweetToast.error(PembayaranActivity.this, response.message(), duration);
+                                showErrorToast(response.message());
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Status> call, Throwable t) {
-                            SweetToast.error(PembayaranActivity.this, t.getMessage(), duration);
+                            showErrorToast(t.getMessage());
                         }
                     });
 
@@ -227,19 +221,19 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
                         public void onResponse(Call<Status> call, Response<Status> response) {
                             if (response.isSuccessful()) {
                                 if (response.body().getStatus().equals("success")) {
-                                    SweetToast.success(PembayaranActivity.this, "Transaction FAILED ID : " + transactionResult.getResponse().getOrderId(), duration);
+                                    showSuccessToast("Transaksi Gagal pada ID : " + transactionResult.getResponse().getOrderId());
                                     finish();
                                 } else {
-                                    SweetToast.error(PembayaranActivity.this, "Update tidak sukses, coba ulangi", duration);
+                                    showInfoToast("Kesalahan pada input data di server");
                                 }
                             } else {
-                                SweetToast.error(PembayaranActivity.this, response.message(), duration);
+                                showInfoToast(response.message());
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Status> call, Throwable t) {
-                            SweetToast.error(PembayaranActivity.this, t.getMessage(), duration);
+                            showErrorToast(t.getMessage());
                         }
                     });
 
@@ -247,13 +241,25 @@ public class PembayaranActivity extends AppCompatActivity implements Transaction
             }
             transactionResult.getResponse().getValidationMessages();
         } else if (transactionResult.isTransactionCanceled()) {
-            SweetToast.warning(PembayaranActivity.this, "Transaction Canceled", duration);
+            showInfoToast("Transaksi dibatalkan dari sistem pembayaran");
         } else {
             if (transactionResult.getStatus().equalsIgnoreCase(TransactionResult.STATUS_INVALID)) {
-                SweetToast.warning(PembayaranActivity.this, "Transaction Invalid", duration);
+                showInfoToast("Transakki tidak valid dari sistem pembayaran");
             } else {
-                SweetToast.warning(PembayaranActivity.this, "Transaction Finished with Failure", duration);
+                showInfoToast("Terjadi kesalahan pada transaksi dari sistem pembayaran");
             }
         }
+    }
+
+    private void showErrorToast(String message) {
+        SweetToast.error(PembayaranActivity.this, message, 2200);
+    }
+
+    private void showInfoToast(String message) {
+        SweetToast.warning(PembayaranActivity.this, message, 2200);
+    }
+
+    private void showSuccessToast(String message) {
+        SweetToast.success(PembayaranActivity.this, message, 2200);
     }
 }
