@@ -110,4 +110,20 @@ public interface ApiService {
     Call<Angkot> getSupir(
             @Path("id") String id
     );
+
+    @FormUrlEncoded
+    @POST("sendFeedback")
+    Call<Status> setFeedback(
+            @Field("fname") String firstName,
+            @Field("lname") String lastName,
+            @Field("email") String email,
+            @Field("feedback") String feedback
+    );
+
+    @FormUrlEncoded
+    @POST("editUser/{id}")
+    Call<Status> changePassword(
+            @Path("id") String id,
+            @Field("password") String password
+    );
 }

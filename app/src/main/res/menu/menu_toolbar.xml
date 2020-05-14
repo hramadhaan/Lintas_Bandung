@@ -6,6 +6,10 @@
         android:title="Profil Pengguna"
         app:showAsAction="never" />
     <item
+        android:id="@+id/toolbar_feedback"
+        android:title="Feedback"
+        app:showAsAction="never" />
+    <item
         android:id="@+id/toolbar_logout"
         android:title="Keluar"
         app:showAsAction="never" />

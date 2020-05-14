@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#fff"
     android:orientation="vertical"
-    tools:context=".activity.ProfileActivity">
+    tools:context=".activity.FeedbackActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/profil_appBar"
@@ -15,7 +13,7 @@
         android:background="@color/whitePrimary">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/profil_toolbar"
+            android:id="@+id/feedback_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/whitePrimary">
@@ -26,11 +24,11 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/profil_judul"
+                    android:id="@+id/feedback_judul"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/montserratbold"
-                    android:text="Profile"
+                    android:text="Feedback"
                     android:textColor="#000"
                     android:textSize="16sp" />
             </RelativeLayout>
@@ -39,7 +37,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
         android:paddingHorizontal="16dp"
         android:paddingVertical="10dp">
@@ -52,9 +50,10 @@
             android:theme="@style/LoginTextInputLayoutStyle">
 
             <EditText
-                android:id="@+id/profil_namaDepan"
+                android:id="@+id/feedback_namaDepan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:fontFamily="@font/montserratregular"
                 android:inputType="textPersonName"
                 android:textSize="14sp" />
@@ -64,14 +63,14 @@
             style="@style/LoginTextInputLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:hint="Nama Akhir"
             android:theme="@style/LoginTextInputLayoutStyle">
 
             <EditText
-                android:id="@+id/profil_namaAkhir"
+                android:id="@+id/feedback_namaAkhir"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:fontFamily="@font/montserratregular"
                 android:inputType="textPersonName"
                 android:textSize="14sp" />
@@ -81,16 +80,16 @@
             style="@style/LoginTextInputLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:hint="E-Mail"
             android:theme="@style/LoginTextInputLayoutStyle">
 
             <EditText
-                android:id="@+id/profil_email"
+                android:id="@+id/feedback_email"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:enabled="false"
                 android:fontFamily="@font/montserratregular"
-                android:inputType="textEmailAddress"
+                android:inputType="textPersonName"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,58 +97,30 @@
             style="@style/LoginTextInputLayoutStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="No. Telp"
+            android:hint="Isi Feedback"
             android:theme="@style/LoginTextInputLayoutStyle">
 
             <EditText
-                android:id="@+id/profil_noTelp"
+                android:id="@+id/feedback_isi"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/montserratregular"
-                android:inputType="number"
-                android:textSize="14sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/LoginTextInputLayoutStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Ganti Password Baru"
-            android:theme="@style/LoginTextInputLayoutStyle"
-            android:visibility="gone"
-            app:helperText="Lewatkan saja jika tidak ingin mengganti password.">
-
-            <EditText
-                android:id="@+id/profil_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/montserratregular"
-                android:inputType="textPassword"
+                android:inputType="textMultiLine"
+                android:maxLines="3"
+                android:minLines="2"
+                android:scrollbars="vertical"
                 android:textSize="14sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/profil_button"
+            android:id="@+id/feedback_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:background="@drawable/box_blue"
             android:fontFamily="@font/montserratbold"
-            android:text="Ubah Nomor Telepon"
+            android:text="Kirim"
             android:textColor="#fff"
-            android:textSize="14sp" />
-
-        <Button
-            android:id="@+id/profil_changePassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/box_red_outline"
-            android:fontFamily="@font/montserratbold"
-            android:text="Ganti Password"
-            android:textColor="#000"
             android:textSize="14sp" />
     </LinearLayout>
 

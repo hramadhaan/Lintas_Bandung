@@ -106,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
             signIn.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         } else if (string_email.matches("")) {
-            showInfoToast("Masukkan E-Mail");
+            showInfoToast("Masukkan E-Mail Anda");
             signIn.setVisibility(View.VISIBLE);
             progressBar.setVisibility(View.GONE);
         } else {
@@ -122,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                             signIn.setVisibility(View.VISIBLE);
                             progressBar.setVisibility(View.GONE);
                         } else {
+                            showSuccessToast("Login Berhasil");
                             appState.setToken(hasilToken);
                             appState.setIsLoggedIn(true);
                             getUser();

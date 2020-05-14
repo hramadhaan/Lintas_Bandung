@@ -44,6 +44,7 @@
                     android:id="@+id/signUp_firstName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratregular"
                     android:hint="Nama Depan"
                     android:inputType="textCapSentences" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -59,6 +60,7 @@
                     android:id="@+id/signUp_lastName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratregular"
                     android:hint="Nama Akhir"
                     android:inputType="textCapSentences" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -74,6 +76,7 @@
                     android:id="@+id/signUp_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratregular"
                     android:hint="E-Mail"
                     android:inputType="textEmailAddress" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -89,6 +92,7 @@
                     android:id="@+id/signUp_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratregular"
                     android:hint="Nomor Telp"
                     android:inputType="number" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -105,6 +109,7 @@
                     android:id="@+id/signUp_password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserratregular"
                     android:hint="Password"
                     android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -115,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/box_blue"
+                android:fontFamily="@font/montserratbold"
                 android:text="Daftar"
                 android:textColor="@color/whitePrimary" />
 

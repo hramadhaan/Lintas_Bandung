@@ -1,7 +1,7 @@
 package com.lintasbandung.lintasbandungapps.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -22,18 +22,18 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import xyz.hasnat.sweettoast.SweetToast;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ChangePasswordActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
-    private EditText namaDepan, namaBelakang, email, noTelp, password;
+    private EditText password;
+    private Button changePassword;
     private ApiService apiService;
     private AppState appState;
-    private Button button, changePassword;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        setContentView(R.layout.activity_change_password);
 
         if (android.os.Build.VERSION.SDK_INT >= 21) {
             Window window = this.getWindow();
@@ -44,55 +44,41 @@ public class ProfileActivity extends AppCompatActivity {
 
         apiService = ApiUtils.getApiSerives();
         appState = AppState.getInstance();
-        toolbar = findViewById(R.id.profil_toolbar);
+        final String id = appState.getUser().getId();
+
+        toolbar = findViewById(R.id.changePassword_toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
+        password = findViewById(R.id.changePassword_password);
+        changePassword = findViewById(R.id.changePassword_button);
 
-        namaDepan = findViewById(R.id.profil_namaDepan);
-        namaDepan.setText(appState.getUser().getFirstName());
-        namaDepan.setEnabled(false);
-        namaBelakang = findViewById(R.id.profil_namaAkhir);
-        namaBelakang.setText(appState.getUser().getLastName());
-        namaBelakang.setEnabled(false);
-        email = findViewById(R.id.profil_email);
-        email.setText(appState.getUser().getEmail());
-        email.setEnabled(false);
-        noTelp = findViewById(R.id.profil_noTelp);
-        noTelp.setText(appState.getUser().getPhone());
-        password = findViewById(R.id.profil_password);
-
-        button = findViewById(R.id.profil_button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (noTelp.getText().toString().equals("")) {
-                    showInfoToast("Harap Masukkan No. Telepon Anda");
-                } else {
-                    saveUser(appState.getUser().getId(), namaDepan.getText().toString(),
-                            namaBelakang.getText().toString(), email.getText().toString(),
-                            noTelp.getText().toString());
-                }
-            }
-        });
-        changePassword = findViewById(R.id.profil_changePassword);
         changePassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(ProfileActivity.this, ChangePasswordActivity.class));
-                finish();
+                if (password.getText().toString().equals("")) {
+                    showInfoToast("Isi Password Baru Anda");
+                } else {
+                    changen(id, password.getText().toString());
+                }
             }
         });
     }
 
-    private void saveUser(String id, String namaDepan, String namaBelakang, String email, String noTelp) {
-        Call<Status> statusCall = apiService.setEditUser(id, namaDepan, namaBelakang, email, noTelp);
-        statusCall.enqueue(new Callback<Status>() {
+    private void changen(String id, String password) {
+        Call<Status> editPasssword = apiService.changePassword(id, password);
+        editPasssword.enqueue(new Callback<Status>() {
             @Override
             public void onResponse(Call<Status> call, Response<Status> response) {
                 if (response.isSuccessful()) {
-                    finish();
-                    appState.logout();
+                    if (response.body().getStatus().equals("success")) {
+                        showSuccessToast("Password Anda telah diganti, harap Login kembali");
+                        finish();
+                        appState.logout();
+                    } else {
+                        showInfoToast("Coba ulangi lagi");
+                        Log.d("Password", response.body().getStatus());
+                    }
                 } else {
                     showInfoToast(response.message());
                 }
@@ -106,14 +92,14 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void showErrorToast(String message) {
-        SweetToast.error(ProfileActivity.this, message, 2200);
+        SweetToast.error(ChangePasswordActivity.this, message, 2200);
     }
 
     private void showInfoToast(String message) {
-        SweetToast.warning(ProfileActivity.this, message, 2200);
+        SweetToast.warning(ChangePasswordActivity.this, message, 2200);
     }
 
     private void showSuccessToast(String message) {
-        SweetToast.success(ProfileActivity.this, message, 2200);
+        SweetToast.success(ChangePasswordActivity.this, message, 2200);
     }
 }

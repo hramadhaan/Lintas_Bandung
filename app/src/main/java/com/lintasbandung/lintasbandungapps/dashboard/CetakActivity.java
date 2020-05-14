@@ -276,7 +276,7 @@ public class CetakActivity extends AppCompatActivity implements OnMapReadyCallba
             public void onResponse(Call<CetakTicketDB> call, Response<CetakTicketDB> response) {
                 if (response.isSuccessful()) {
                     int jumlahPenumpang = Integer.parseInt(response.body().getJumlahTiket());
-                    int total = jumlahPenumpang * 10000;
+                    int total = jumlahPenumpang * 5000;
                     keberangkatan.setText(response.body().getRute().getNamaTrayek());
                     jumlahPesanan.setText(jumlahPenumpang + " Tiket");
                     harga.setText("Rp. " + NumberFormat.getNumberInstance(Locale.US).format(total));

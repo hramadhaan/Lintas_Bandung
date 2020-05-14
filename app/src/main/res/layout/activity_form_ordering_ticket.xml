@@ -39,6 +39,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="8dp"
         android:layout_marginTop="15dp"
         android:orientation="vertical">
 
@@ -77,6 +79,8 @@
         android:id="@+id/formOrder_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="8dp"
         android:layout_marginTop="10dp"
         android:orientation="vertical">
 
@@ -114,7 +118,9 @@
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="8dp">
 
             <EditText
                 android:id="@+id/formOrder_namaPemesan"
@@ -130,6 +136,8 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginVertical="8dp"
             android:layout_marginTop="13dp"
             app:helperText="Maksimum 4 Orang">
 

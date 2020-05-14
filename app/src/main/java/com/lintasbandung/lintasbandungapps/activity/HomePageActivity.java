@@ -42,7 +42,6 @@ import xyz.hasnat.sweettoast.SweetToast;
 
 public class HomePageActivity extends AppCompatActivity {
 
-
     private Toolbar toolbar;
     private TextView judul;
     private TextView nama, lihatSemua;
@@ -180,6 +179,9 @@ public class HomePageActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.toolbar_profile:
                 startActivity(new Intent(HomePageActivity.this, ProfileActivity.class));
+                break;
+            case R.id.toolbar_feedback:
+                startActivity(new Intent(HomePageActivity.this, FeedbackActivity.class));
                 break;
             case R.id.toolbar_logout:
                 appState.logout();

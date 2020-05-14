@@ -1,15 +1,17 @@
 package com.lintasbandung.lintasbandungapps.activity.angkot;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;
@@ -18,12 +20,10 @@ import com.google.maps.model.DirectionsResult;
 import com.google.maps.model.TravelMode;
 import com.lintasbandung.lintasbandungapps.BuildConfig;
 import com.lintasbandung.lintasbandungapps.R;
-import com.lintasbandung.lintasbandungapps.dashboard.CetakActivity;
 import com.lintasbandung.lintasbandungapps.data.AppState;
 import com.lintasbandung.lintasbandungapps.models.DataUser;
 import com.lintasbandung.lintasbandungapps.models.Status;
 import com.lintasbandung.lintasbandungapps.network.ApiService;
-import com.lintasbandung.lintasbandungapps.ticketing.PembayaranActivity;
 import com.lintasbandung.lintasbandungapps.utils.ApiUtils;
 import com.midtrans.sdk.corekit.callback.TransactionFinishedCallback;
 import com.midtrans.sdk.corekit.core.MidtransSDK;
@@ -55,6 +55,7 @@ public class CheckOutAngkotActivity extends AppCompatActivity implements Transac
     private static final int overview = 0;
     private static final int duration = 2500;
     int a;
+    private Toolbar toolbar;
 
 
     @Override
@@ -62,7 +63,19 @@ public class CheckOutAngkotActivity extends AppCompatActivity implements Transac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_check_out_angkot);
 
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            Window window = this.getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.setStatusBarColor(this.getResources().getColor(R.color.black));
+        }
+
         initMidTrans();
+
+        toolbar = findViewById(R.id.angkotCheckOut_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         apiService = ApiUtils.getApiSerives();
         appState = AppState.getInstance();
@@ -158,8 +171,16 @@ public class CheckOutAngkotActivity extends AppCompatActivity implements Transac
         return "Time :" + results.routes[overview].legs[overview].duration.humanReadable + " Distance :" + results.routes[overview].legs[overview].distance.humanReadable;
     }
 
-    private void showToast(String message) {
-        Toast.makeText(CheckOutAngkotActivity.this, message, Toast.LENGTH_LONG).show();
+    private void showErrorToast(String message) {
+        SweetToast.error(CheckOutAngkotActivity.this, message, 2200);
+    }
+
+    private void showInfoToast(String message) {
+        SweetToast.warning(CheckOutAngkotActivity.this, message, 2200);
+    }
+
+    private void showSuccessToast(String message) {
+        SweetToast.success(CheckOutAngkotActivity.this, message, 2200);
     }
 
     @Override
@@ -190,38 +211,38 @@ public class CheckOutAngkotActivity extends AppCompatActivity implements Transac
                         public void onResponse(Call<Status> call, Response<Status> response) {
                             if (response.isSuccessful()) {
                                 if (response.body().getStatus().equals("success")) {
-                                    SweetToast.success(CheckOutAngkotActivity.this, "Transaction Finished ID : " + transactionResult.getResponse().getOrderId(), duration);
+                                    showSuccessToast("Terimakasih telah melakukan pembayaran");
                                     finish();
                                 } else {
-                                    SweetToast.error(CheckOutAngkotActivity.this, "Update tidak sukses, coba ulangi", duration);
+                                    showInfoToast("Coba ulangi kembali");
                                 }
                             } else {
-                                SweetToast.error(CheckOutAngkotActivity.this, response.message(), duration);
+                                showInfoToast(response.message());
                             }
                         }
 
                         @Override
                         public void onFailure(Call<Status> call, Throwable t) {
-                            SweetToast.error(CheckOutAngkotActivity.this, t.getMessage(), duration);
+                            showErrorToast(t.getMessage());
                         }
                     });
 
                     break;
                 case TransactionResult.STATUS_PENDING:
-                    showToast("Transaksi Dibatalkan");
+                    showErrorToast("Transaksi Dibatalkan");
                     break;
                 case TransactionResult.STATUS_FAILED:
-                    showToast("Transaksi Dibatalkan");
+                    showErrorToast("Transaksi Dibatalkan");
                     break;
             }
             transactionResult.getResponse().getValidationMessages();
         } else if (transactionResult.isTransactionCanceled()) {
-            SweetToast.warning(CheckOutAngkotActivity.this, "Transaction Canceled", duration);
+            showInfoToast("Transaksi dibatalkan");
         } else {
             if (transactionResult.getStatus().equalsIgnoreCase(TransactionResult.STATUS_INVALID)) {
-                SweetToast.warning(CheckOutAngkotActivity.this, "Transaction Invalid", duration);
+                showInfoToast("Terjadi kesalahan pada pembayaran");
             } else {
-                SweetToast.warning(CheckOutAngkotActivity.this, "Transaction Finished with Failure", duration);
+                showInfoToast("Transaksi telah selesai, namun terdapat kendala");
             }
         }
     }
