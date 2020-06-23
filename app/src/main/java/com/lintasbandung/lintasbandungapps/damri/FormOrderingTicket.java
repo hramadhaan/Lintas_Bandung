@@ -74,7 +74,13 @@ public class FormOrderingTicket extends AppCompatActivity {
         month = Calendar.MONTH;
         day = Calendar.DAY_OF_MONTH;
 
+        Calendar current = Calendar.getInstance();
+        String currentDateString = DateFormat.getDateInstance(DateFormat.FULL).format(current.getTime());
+
+
         currentDate = findViewById(R.id.fromOrder_currentDate);
+        currentDate.setText(currentDateString);
+        waktu = new SimpleDateFormat("yyyy-MM-dd").format(current.getTime());
         chooseDate = findViewById(R.id.formOrder_date);
         chooseDate.setOnClickListener(new View.OnClickListener() {
             @Override

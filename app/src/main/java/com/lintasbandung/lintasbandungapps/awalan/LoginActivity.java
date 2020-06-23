@@ -207,7 +207,7 @@ public class LoginActivity extends AppCompatActivity {
             GoogleSignInAccount account = task.getResult(ApiException.class);
             if (account == null) {
                 showInfoToast("Akun G-Mail tidak terdaftar");
-                signOut();
+//                signOut();
             } else {
                 startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
             }

@@ -3,11 +3,10 @@
     android:id="@+id/listAngkot"
     android:layout_width="match_parent"
     android:layout_height="120dp"
-    android:layout_marginVertical="7dp"
+    android:layout_marginVertical="4dp"
     android:background="@drawable/box_white"
-    android:elevation="5dp"
     android:orientation="horizontal"
-    android:paddingHorizontal="8dp">
+    android:paddingHorizontal="4dp">
 
     <ImageView
         android:id="@+id/listAngkotImage"
